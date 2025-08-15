@@ -6,7 +6,7 @@ All about stuff Blank is adding:
 - 3 new Spectral cards
 - 3 new Enhancements and Tarot cards
 - 1 pair of Vouchers
-- 7 new Decks
+- 8 new Decks
 - 2 new Stakes
 - 2 new Stickers
 - 1 new Seal
