@@ -1,0 +1,70 @@
+[manifest]
+version = "1.0.0"
+dump_lua = true
+priority = 1
+
+    # Unstable joker
+[[patches]]
+[patches.pattern]
+target = "card.lua"
+pattern = '''
+function Card:calculate_joker(context)
+'''
+position = "before"
+payload = '''
+
+function Card:calculate_unstable()
+    if self.ability.mksn_unstable then
+        G.E_MANAGER:add_event(Event({
+            func = function()
+                play_sound('mksn_explosion')
+                self.T.r = -0.2
+                self:juice_up(0.3, 0.4)
+                self.states.drag.is = true
+                self.children.center.pinch.x = true
+                G.E_MANAGER:add_event(Event({trigger = 'after', delay = 0.3, blockable = false,
+                    func = function()
+                        G.jokers:remove_card(self)
+                        self:remove()
+                        self = nil
+                        return true; end})) 
+                return true
+            end
+        })) 
+    end
+end
+
+'''
+match_indent = true
+times = 1
+
+
+    # Eternal sticker compat
+[[patches]]
+[patches.pattern]
+target = "functions/common_events.lua"
+pattern = '''
+card:set_eternal(true)
+'''
+position = "at"
+payload = '''
+if not (card.ability.mksn_unstable) then
+    card:set_eternal(true)
+end
+'''
+match_indent = true
+
+    # Perishable sticker compat
+[[patches]]
+[patches.pattern]
+target = "functions/common_events.lua"
+pattern = '''
+card:set_perishable(true)
+'''
+position = "at"
+payload = '''
+if not (card.ability.mksn_unstable) then
+    card:set_perishable(true)
+end
+'''
+match_indent = true

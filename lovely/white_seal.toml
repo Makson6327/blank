@@ -1,0 +1,23 @@
+[manifest]
+version = "1.0.0"
+dump_lua = true
+priority = 1
+
+    # White seal
+[[patches]]
+[patches.pattern]
+target = "card.lua"
+pattern = '''
+function Card:set_debuff(should_debuff)
+'''
+position = "after"
+payload = '''
+if self.seal and self.seal == "mksn_white" then
+    if self.debuff then
+        self.debuff = false
+    end
+    return
+end
+'''
+match_indent = true
+times = 1

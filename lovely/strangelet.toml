@@ -1,0 +1,31 @@
+[manifest]
+version = "1.0.0"
+dump_lua = true
+priority = 1
+
+    # Negative cons in shop
+[[patches]]
+[patches.pattern]
+target = "functions/common_events.lua"
+pattern = '''
+local card = Card(area.T.x + area.T.w/2, area.T.y, G.CARD_W, G.CARD_H, SMODS.set_create_card_front or front, center,
+    {bypass_discovery_center = SMODS.bypass_create_card_discovery_center or area==G.shop_jokers or area == G.pack_cards or area == G.shop_vouchers or (G.shop_demo and area==G.shop_demo) or area==G.jokers or area==G.consumeables,
+     bypass_discovery_ui = SMODS.bypass_create_card_discovery_center or area==G.shop_jokers or area == G.pack_cards or area==G.shop_vouchers or (G.shop_demo and area==G.shop_demo),
+     discover = SMODS.bypass_create_card_discover or area==G.jokers or area==G.consumeables, 
+     bypass_back = G.GAME.selected_back.pos})
+'''
+position = "after"
+payload = '''
+
+if _type == 'Tarot' or _type == 'Planet' or _type == 'Spectral' then
+    if next(SMODS.find_card('j_mksn_strangelet')) then
+        local strangelet_random = pseudorandom('strangelet', 1, 4)
+        if strangelet_random == 1 then
+            card:set_edition('e_negative')
+        end
+    end
+end
+
+'''
+match_indent = true
+times = 1

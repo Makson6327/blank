@@ -1,0 +1,43 @@
+[manifest]
+version = "1.0.0"
+dump_lua = true
+priority = 1
+
+    # Large joker added
+[[patches]]
+[patches.pattern]
+target = "card.lua"
+pattern = '''
+if self.ability.set == 'Enhanced' or self.ability.set == 'Default' then 
+    if self.ability.name == 'Gold Card' and self.seal == 'Gold' and self.playing_card then 
+        check_for_unlock({type = 'double_gold'})
+    end
+    return 
+end
+'''
+position = "after"
+payload = '''
+if self.ability.mksn_large then
+    G.jokers.config.card_limit = G.jokers.config.card_limit - 1
+end
+'''
+match_indent = true
+times = 1
+
+    # Large joker removed
+[[patches]]
+[patches.pattern]
+target = "card.lua"
+pattern = '''
+if self.ability.name == 'Credit Card' then
+    G.GAME.bankrupt_at = G.GAME.bankrupt_at + self.ability.extra
+end
+'''
+position = "after"
+payload = '''
+if self.ability.mksn_large then
+    G.jokers.config.card_limit = G.jokers.config.card_limit + 1
+end
+'''
+match_indent = true
+times = 1

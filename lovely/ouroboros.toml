@@ -1,0 +1,93 @@
+[manifest]
+version = "1.0.0"
+dump_lua = true
+priority = 1
+
+    # New game object
+[[patches]]
+[patches.pattern]
+target = "game.lua"
+pattern = '''
+joker_usage = {},
+consumeable_usage = {},
+hand_usage = {},
+last_tarot_planet = nil,
+'''
+position = "after"
+payload = '''
+last_joker_sold_destroyed = nil,
+'''
+match_indent = true
+times = 1
+
+
+    # Last joker dissolved
+[[patches]]
+[patches.pattern]
+target = "card.lua"
+pattern = '''
+if self.getting_sliced and not (self.ability.set == 'Default' or self.ability.set == 'Enhanced') then
+    local flags = SMODS.calculate_context({joker_type_destroyed = true, card = self})
+    if flags.no_destroy then self.getting_sliced = nil; return end
+end
+'''
+position = "after"
+payload = '''
+if self.config.center.set == 'Joker' then 
+    G.E_MANAGER:add_event(Event({
+        trigger = 'immediate',
+        func = function()
+        G.E_MANAGER:add_event(Event({
+            trigger = 'immediate',
+            func = function()
+                G.GAME.last_joker_sold_destroyed = self.config.center_key
+                return true
+            end
+        }))
+        return true
+    end
+    }))
+end
+'''
+match_indent = true
+times = 1
+
+
+    # UI things
+[[patches]]
+[patches.pattern]
+target = "functions/common_events.lua"
+pattern = '''
+elseif _c.name == 'Ankh' then
+    if G.jokers and G.jokers.cards then
+        for k, v in ipairs(G.jokers.cards) do
+            if (v.edition and v.edition.negative) and (G.localization.descriptions.Other.remove_negative)then 
+                info_queue[#info_queue+1] = G.P_CENTERS.e_negative
+                main_end = {}
+                localize{type = 'other', key = 'remove_negative', nodes = main_end, vars = {}}
+                main_end = main_end[1]
+                break
+            end
+        end
+    end
+'''
+position = "after"
+payload = '''
+elseif _c.name == 'Ouroboros' then
+    local ouroboros_c = G.GAME.last_joker_sold_destroyed and G.P_CENTERS[G.GAME.last_joker_sold_destroyed] or nil
+    local last_joker_sold_destroyed = ouroboros_c and localize{type = 'name_text', key = ouroboros_c.key, set = ouroboros_c.set} or localize('k_none')
+    local colour = (not ouroboros_c) and G.C.RED or G.C.GREEN
+    main_end = {
+        {n=G.UIT.C, config={align = "bm", padding = 0.02}, nodes={
+            {n=G.UIT.C, config={align = "m", colour = colour, r = 0.05, padding = 0.05}, nodes={
+                {n=G.UIT.T, config={text = ' '..last_joker_sold_destroyed..' ', colour = G.C.UI.TEXT_LIGHT, scale = 0.3, shadow = true}},
+            }}
+        }}
+    }
+    loc_vars = {last_joker_sold_destroyed}
+    if not (not ouroboros_c) then
+        info_queue[#info_queue+1] = ouroboros_c
+    end
+'''
+match_indent = true
+times = 1

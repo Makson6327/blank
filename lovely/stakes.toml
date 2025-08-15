@@ -1,0 +1,36 @@
+[manifest]
+version = "1.0.0"
+dump_lua = true
+priority = 1
+
+    # Indigo stake
+[[patches]]
+[patches.pattern]
+target = "functions/common_events.lua"
+pattern = '''
+if (area == G.shop_jokers) or (area == G.pack_cards) then
+'''
+position = "after"
+payload = '''
+if G.GAME.modifiers.enable_large_in_shop and pseudorandom(('large')..G.GAME.round_resets.ante) > 0.7 then
+    SMODS.Stickers['mksn_large']:apply(card, true)
+end
+'''
+match_indent = true
+times = 1
+
+    # Lime stake
+[[patches]]
+[patches.pattern]
+target = "functions/common_events.lua"
+pattern = '''
+if (area == G.shop_jokers) or (area == G.pack_cards) then
+'''
+position = "after"
+payload = '''
+if G.GAME.modifiers.enable_unstable_in_shop and pseudorandom(('unstable')..G.GAME.round_resets.ante) > 0.7 then
+    SMODS.Stickers['mksn_unstable']:apply(card, true)
+end
+'''
+match_indent = true
+times = 1

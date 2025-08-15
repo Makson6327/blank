@@ -1,0 +1,26 @@
+[manifest]
+version = "1.0.0"
+dump_lua = true
+priority = 1
+
+    # Free boosters
+[[patches]]
+[patches.pattern]
+target = "card.lua"
+pattern = '''
+if self.ability.rental then self.cost = 1 end
+'''
+position = "after"
+payload = '''
+if G.GAME.used_vouchers['v_mksn_tradehall'] then
+    if G.shop_booster and G.shop_booster.cards then
+        for k, v in pairs(G.shop_booster.cards) do
+            if k == 2 then 
+                v.cost = 0
+            end
+        end
+    end
+end
+'''
+match_indent = true
+times = 1
