@@ -68,6 +68,28 @@ return {
                     "Joker slot",
                 },
             },
+            b_mksn_travel = {
+                name = "Travel Deck",
+                text = {
+                    "{C:attention}-1{} Ante if",
+                    "{C:attention}4{} Blinds skipped",
+                },
+            },
+            b_mksn_traffic = {
+                name = "Traffic Deck",
+                text = {
+                    "Only Joker Tags",
+                    "may appear during run",
+                },
+            },
+            b_mksn_maple = {
+                name = "Maple Deck",
+                text = {
+                    "Cards give {C:mult}Mult",
+                    "instead of {C:chips}chips",
+                    "{C:red}X2{} base Blind size",
+                },
+            },
         },
         Blind = {
             bl_mksn_final_blade = {
@@ -393,7 +415,7 @@ return {
                 name = "Lottery Ticket",
                 text = {
                     "{C:green}#1# in #2#{} chance",
-                    "to win {C:money}$#3# when",
+                    "to win {C:money}$#3#{} when",
                     "{C:attention}Scratched{} card is scored",
                 },
             },

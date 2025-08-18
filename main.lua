@@ -337,6 +337,80 @@ SMODS.Back {
     end,
 }
 
+SMODS.Back {
+	key = "travel",
+    atlas = "Backs",
+    pos = {
+        x = 2,
+        y = 1
+    },
+    config = {extra = {blinds_skipped = 0}},
+    loc_vars = function(self, info_queue, card)
+        return {
+            vars = {
+                self.config.extra.blinds_skipped
+            }
+        }
+    end,
+    calculate = function(self, card, context)
+		if context.skip_blind then
+            self.config.extra.blinds_skipped = self.config.extra.blinds_skipped + 1
+        end
+
+        if self.config.extra.blinds_skipped == 4 then
+            self.config.extra.blinds_skipped = 0
+            ease_ante(-1)
+        end
+    end,
+}
+
+SMODS.Back {
+	key = "traffic",
+    atlas = "Backs",
+    pos = {
+        x = 4,
+        y = 1
+    },
+    apply = function (self)
+        local banned = {
+            "tag_boss",
+            "tag_investment",
+            "tag_voucher",
+            "tag_standard",
+            "tag_charm",
+            "tag_meteor",
+            "tag_buffoon",
+            "tag_ethereal",
+            "tag_handy",
+            "tag_garbage",
+            "tag_double",
+            "tag_coupon",
+            "tag_d_six",
+            "tag_juggle",
+            "tag_top_up",
+            "tag_skip",
+            "tag_orbital",
+            "tag_economy"
+        }
+		for k,v in ipairs(banned) do
+			G.GAME.banned_keys[v] = true
+		end
+	end,
+}
+
+SMODS.Back {
+	key = "maple",
+    atlas = "Backs",
+    pos = {
+        x = 5,
+        y = 1
+    },
+    config = {ante_scaling = 2},
+    apply = function(self, back)
+        G.GAME.modifiers.mksn_maple_mult = true
+    end
+}
+
 
 
 ---------------- Blinds ----------------
@@ -2555,7 +2629,7 @@ SMODS.Joker {
     perishable_compat = true,
     soul_pos = nil,
 
-    config = {extra = {dollars = 10, odds = 8}},
+    config = {extra = {dollars = 10, odds = 6}},
     loc_vars = function(self, info_queue, card)
         info_queue[#info_queue + 1] = G.P_CENTERS.m_mksn_scratched
         return {
@@ -2956,4 +3030,22 @@ function SMODS.current_mod.set_debuff(card)
         return 'prevent_debuff'
     end
     return false
+end
+
+local cgcb = Card.get_chip_bonus
+function Card:get_chip_bonus()
+    local ret = cgcb(self)
+    if G.GAME.modifiers.mksn_maple_mult then
+        ret = ret - self.base.nominal
+    end
+    return ret
+end
+
+local cgcm = Card.get_chip_mult
+function Card:get_chip_mult()
+    local ret = cgcm(self)
+    if G.GAME.modifiers.mksn_maple_mult then
+        ret = ret + self.base.nominal
+    end
+    return ret
 end
