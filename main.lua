@@ -762,7 +762,7 @@ SMODS.Enhancement {
     no_suit = true,
     always_scores = true,
     replace_base_card = true,
-    config = {extra = {x_mult = 1.5}},
+    config = {extra = {x_mult = 2}},
     loc_vars = function(self, info_queue, card)
         return {
             vars = {
