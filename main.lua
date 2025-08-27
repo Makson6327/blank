@@ -540,30 +540,6 @@ SMODS.Consumable {
 }
 
 SMODS.Consumable {
-    key = 'ouroboros',
-    set = 'Spectral',
-    atlas = 'Consumables',
-    pos = {
-        x = 1,
-        y = 0
-    },
-    config = {},
-    cost = 4,
-    use = function(self, card, area, copier)
-        G.E_MANAGER:add_event(Event({trigger = 'after', delay = 0.4, func = function()
-            play_sound('timpani')
-            local card = create_card('Joker', G.jokers, nil, nil, nil, nil, G.GAME.last_joker_sold_destroyed, 'fool')
-            card:add_to_deck()
-            G.jokers:emplace(card)
-            return true end }))
-        delay(0.6)
-    end,
-    can_use = function(self, card)
-        return G.jokers and #G.jokers.cards < G.jokers.config.card_limit and G.GAME.last_joker_sold_destroyed
-    end,
-}
-
-SMODS.Consumable {
     key = 'hope',
     set = 'Spectral',
     atlas = 'Consumables',

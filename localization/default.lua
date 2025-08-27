@@ -145,15 +145,6 @@ return {
                     "{C:attention}1{} selected card in hand",
                 },
             },
-            c_mksn_ouroboros = {
-                name = 'Ouroboros',
-                text = {
-                    "Creates the last",
-                    "{C:attention}Joker{} card sold",
-                    "or destroyed during this run",
-                    "{C:inactive}(Must have room)",
-                },
-            },
             c_mksn_hope = {
                 name = 'Hope',
                 text = {
