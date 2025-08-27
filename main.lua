@@ -1638,11 +1638,11 @@ SMODS.Joker {
             if SMODS.has_enhancement(context.other_card, 'm_mult') then
                 card.ability.extra.scored = true
                 card.ability.extra.xmult = card.ability.extra.xmult + card.ability.extra.plus_xmult
+                return {
+                    message = localize('k_upgrade_ex'),
+                    colour = G.C.MULT,
+                }
             end
-            return {
-                message = localize('k_upgrade_ex'),
-                colour = G.C.MULT,
-            }
         end
 
         if context.end_of_round and not context.repetition and not context.individual and not context.blueprint then
@@ -2953,6 +2953,58 @@ SMODS.Joker {
                     end
                 end
             end
+        end
+    end
+}
+
+SMODS.Joker {
+    key = "map",
+    rarity = 1,
+    pos = {
+        x = 8,
+        y = 3
+    },
+    atlas = "Jokers",
+    cost = 4,
+    unlocked = true,
+    blueprint_compat = true,
+    eternal_compat = true,
+    perishable_compat = true,
+    soul_pos = nil,
+
+    config = {extra = {mult = 0, plus_mult = 20}},
+    loc_vars = function(self, info_queue, card)
+        return {
+            vars = {
+                card.ability.extra.mult,
+                card.ability.extra.plus_mult
+            }
+        }
+    end,
+
+    calculate = function(self, card, context)
+        if context.joker_main and context.cardarea == G.jokers then
+            if card.ability.extra.mult > 0 then
+                return {
+                    mult = card.ability.extra.mult
+                }
+            end
+        end
+
+        if context.skip_blind and not context.blueprint then
+            card.ability.extra.mult = card.ability.extra.mult + card.ability.extra.plus_mult
+            return {
+                message = localize('k_upgrade_ex'),
+                colour = G.C.RED
+            }
+        end
+
+        if context.end_of_round and not context.repetition and not context.individual and not context.blueprint then
+            card.ability.extra.mult = 0
+            return {
+                message = localize('k_reset'),
+                colour = G.C.RED
+            }
         end
     end
 }

@@ -260,7 +260,7 @@ return {
                     "Random booster pack in",
                     "shop is free",
                 }
-            }
+            },
         },
         Joker = {
             j_mksn_ace_ace_baby = {
@@ -389,7 +389,7 @@ return {
                 text = {
                     "If played hand contains",
                     "scoring {C:attention}Jack{}, destroy all",
-                    "non-Jack cards in hand",
+                    "non-Jack cards in played hand",
                 },
             },
             j_mksn_kaleidoscope = {
@@ -417,6 +417,15 @@ return {
                     "{C:green}#1# in #2#{} chance",
                     "to win {C:money}$#3#{} when",
                     "{C:attention}Scratched{} card is scored",
+                },
+            },
+            j_mksn_map = {
+                name = "Map",
+                text = {
+                    "{C:mult}+#2#{} Mult when",
+                    "{C:attention}Blind{} skipped",
+                    "Resets at the end of round",
+                    "{C:inactive}(Currently {C:mult}+#1#{C:inactive} Mult)",
                 },
             },
             j_mksn_merchant = {
@@ -567,6 +576,13 @@ return {
                     "{C:attention}consecutive{} poker hand",
                     "{C:inactive}(Currently {X:mult,C:white} X#1# {C:inactive} Mult)",
                     "{C:inactive}(Last hand played is {C:attention}#3#{C:inactive})",
+                },
+            },
+            j_mksn_ufo = {
+                name = "UFO",
+                text = {
+                    "Played poker hands",
+                    "has random levels",
                 },
             },
             j_mksn_wild = {
