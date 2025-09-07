@@ -1,0 +1,23 @@
+[manifest]
+version = "1.0.0"
+dump_lua = true
+priority = 1
+
+    # Randomize hands level
+[[patches]]
+[patches.pattern]
+target = "blind.lua"
+pattern = '''
+if self.disabled then return mult, hand_chips, false end
+'''
+position = "after"
+payload = '''
+if next(SMODS.find_card('j_mksn_ufo')) then
+    local range = pseudorandom("ufoing", -5, 5)
+    return math.max(mult + (G.GAME.hands[text].l_mult * range), G.GAME.hands[text].s_mult),
+            math.max(hand_chips + (G.GAME.hands[text].l_chips * range), G.GAME.hands[text].s_chips),
+            true
+end
+'''
+match_indent = true
+times = 1

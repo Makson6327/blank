@@ -296,7 +296,7 @@ SMODS.Back {
         if context.end_of_round and not context.repetition and not context.individual then
 			G.E_MANAGER:add_event(Event({
 				func = function()
-					if pseudorandom("radioactive_hit") < G.GAME.probabilities.normal / 75 then
+					if SMODS.pseudorandom_probability(card, 'radioactive_hit', 1, 75) then
                         G.STATE = G.STATES.GAME_OVER
                         if not G.GAME.won and not G.GAME.seeded and not G.GAME.challenge then 
                             G.PROFILES[G.SETTINGS.profile].high_scores.current_streak.amt = 0
@@ -681,7 +681,7 @@ SMODS.Enhancement {
     end,
     calculate = function(self, card, context)
         if context.cardarea == G.play and context.main_scoring then
-            if pseudorandom("silver_money") < G.GAME.probabilities.normal / card.ability.extra.odds then
+            if SMODS.pseudorandom_probability(card, 'silver_money', 1, card.ability.extra.odds) then
                 return {
                     dollars = card.ability.extra.money
                 }
@@ -709,7 +709,7 @@ SMODS.Enhancement {
     end,
     calculate = function(self, card, context)
         if context.cardarea == G.play and context.main_scoring then
-            local opt = pseudorandom("stained_card", 1, 5)
+            local opt = pseudorandom("stained_card", 1, 4)
             if opt == 1 then
                 return {
                     xmult = card.ability.extra.xmult
@@ -807,7 +807,7 @@ SMODS.Sticker {
         card.ability[self.key] = val
     end,
     calculate = function(self, card, context)
-        if context.after and pseudorandom("unstable_hits") < G.GAME.probabilities.normal / 5 then
+        if context.after and SMODS.pseudorandom_probability(card, 'unstable_hit', 1, 5) then
             card:calculate_unstable()
             return {
                 card = card,
@@ -910,6 +910,25 @@ SMODS.Voucher{
             end
         end
     end,
+}
+
+SMODS.Voucher{
+    key = "deviation",
+    atlas = "Vouchers",
+    pos = {
+        x = 1,
+        y = 0
+    },
+}
+
+SMODS.Voucher{
+    key = "regularity",
+    atlas = "Vouchers",
+    pos = {
+        x = 1,
+        y = 1
+    },
+    requires = {'v_mksn_deviation'},
 }
 
 
@@ -1353,7 +1372,7 @@ SMODS.Joker {
         end
 
         if context.end_of_round and not context.repetition and not context.individual and not context.blueprint then
-            if pseudorandom("toxic_waste") < G.GAME.probabilities.normal / card.ability.extra.odds then
+            if SMODS.pseudorandom_probability(card, 'toxic_waste', 1, card.ability.extra.odds) then
                 G.E_MANAGER:add_event(Event({
                     trigger = 'after',
                     delay = 0.2,
@@ -2565,7 +2584,7 @@ SMODS.Joker {
         if not context.blueprint and context.individual and context.cardarea == G.play then
             if SMODS.has_enhancement(context.other_card, 'm_mksn_stained') then
                 card.ability.extra.scored = true
-                local opt = pseudorandom('stained', 1, 5)
+                local opt = pseudorandom('stained', 1, 4)
                 if opt == 1 then
                     card.ability.extra.xmult = card.ability.extra.xmult + card.ability.extra.plus_xmult
                     return {
@@ -2629,7 +2648,7 @@ SMODS.Joker {
     calculate = function(self, card, context)
         if not context.blueprint and context.individual and context.cardarea == G.play then
             if SMODS.has_enhancement(context.other_card, 'm_mksn_scratched') then
-                if pseudorandom("lottery_money") < G.GAME.probabilities.normal / card.ability.extra.odds then
+                if SMODS.pseudorandom_probability(card, 'lottery_money', 1, card.ability.extra.odds) then
                     return {
                         dollars = card.ability.extra.dollars
                     }
@@ -2794,7 +2813,7 @@ SMODS.Joker {
 
     calculate = function(self, card, context)
         if context.end_of_round and not context.repetition and not context.individual and not context.blueprint then
-            if pseudorandom("rarity_in_cereals") < G.GAME.probabilities.normal / card.ability.extra.odds then
+            if SMODS.pseudorandom_probability(card, 'rarity_in_box', 1, card.ability.extra.odds) then
                 if #G.consumeables.cards + G.GAME.consumeable_buffer < G.consumeables.config.card_limit then
                     G.E_MANAGER:add_event(Event({
                         func = function()
@@ -2810,13 +2829,13 @@ SMODS.Joker {
                                 G.GAME.consumeable_buffer = 0
                                 return true
                             end)}))
-                    return {
-                        message = localize('k_plus_spectral'),
-                        colour = G.C.SECONDARY_SET.Spectral,
-                        card = self
-                    }
-                    end  
-                }))
+                            return {
+                                message = localize('k_plus_spectral'),
+                                colour = G.C.SECONDARY_SET.Spectral,
+                                card = self
+                            }
+                        end  
+                    }))
                 end
                 
                 G.E_MANAGER:add_event(Event({
@@ -2986,15 +3005,257 @@ SMODS.Joker {
 }
 
 SMODS.Joker {
-    key = "sommers",
-    rarity = 4,
+    key = "ufo",
+    rarity = 2,
+    pos = {
+        x = 9,
+        y = 3
+    },
+    atlas = "Jokers",
+    cost = 6,
+    unlocked = true,
+    blueprint_compat = false,
+    eternal_compat = true,
+    perishable_compat = true,
+    soul_pos = nil,
+}
+
+SMODS.Joker {
+    key = "pootis_engage",
+    rarity = 2,
     pos = {
         x = 0,
         y = 4
     },
-    soul_pos = {
+    atlas = "Jokers",
+    cost = 6,
+    unlocked = true,
+    blueprint_compat = true,
+    eternal_compat = true,
+    perishable_compat = true,
+    soul_pos = nil,
+
+    config = {extra = {xmult = 5}},
+    loc_vars = function(self, info_queue, card)
+        return {
+            vars = {
+                card.ability.extra.xmult
+            }
+        }
+    end,
+
+    calculate = function(self, card, context)
+        if context.joker_main and context.cardarea == G.jokers then
+            local pootis = 0
+            for k, v in ipairs(G.jokers.cards) do
+                if v.ability.name ~= 'j_mksn_pootis_engage'  then
+                    for k, v in pairs(G.GAME.probabilities) do 
+                        pootis = pootis + 1
+                    end
+                end
+            end
+            if pootis == 2 then
+                return {
+                    xmult = card.ability.extra.xmult
+                }
+            end
+        end
+    end
+}
+
+SMODS.Joker {
+    key = "bottlers",
+    rarity = 1,
+    pos = {
+        x = 1,
+        y = 4
+    },
+    atlas = "Jokers",
+    cost = 6,
+    unlocked = true,
+    blueprint_compat = true,
+    eternal_compat = true,
+    perishable_compat = true,
+    soul_pos = nil,
+
+    config = {extra = {plus_chips = 40, start_dollars = 25, sub_dollars = 5}},
+    loc_vars = function(self, info_queue, card)
+        return {
+            vars = {
+                card.ability.extra.plus_chips,
+                card.ability.extra.plus_chips * math.floor((card.ability.extra.start_dollars - G.GAME.dollars + (G.GAME.dollar_buffer or 0))/card.ability.extra.sub_dollars),
+                card.ability.extra.start_dollars,
+                card.ability.extra.sub_dollars,
+            }
+        }
+    end,
+
+    calculate = function(self, card, context)
+        if context.joker_main and context.cardarea == G.jokers then
+            if G.GAME.dollars < card.ability.extra.start_dollars then
+                return {
+                    chips = card.ability.extra.plus_chips * math.floor((card.ability.extra.start_dollars - G.GAME.dollars + (G.GAME.dollar_buffer or 0))/card.ability.extra.sub_dollars)
+                }
+            end
+        end
+    end
+}
+
+SMODS.Joker {
+    key = "soldier",
+    rarity = 1,
+    pos = {
+        x = 2,
+        y = 4
+    },
+    atlas = "Jokers",
+    cost = 4,
+    unlocked = true,
+    blueprint_compat = true,
+    eternal_compat = false,
+    perishable_compat = true,
+    soul_pos = nil,
+
+    config = {extra = {mult = 25, sub_mult = 5}},
+    loc_vars = function(self, info_queue, card)
+        return {
+            vars = {
+                card.ability.extra.mult,
+                card.ability.extra.sub_mult
+            }
+        }
+    end,
+
+    calculate = function(self, card, context)
+        if context.joker_main and context.cardarea == G.jokers then
+            return {
+                mult = card.ability.extra.mult
+            }
+        end
+
+        if context.end_of_round and not context.repetition and not context.individual and not context.blueprint and not G.GAME.blind.boss then
+            if card.ability.extra.mult - card.ability.extra.sub_mult <= 0 then 
+                G.E_MANAGER:add_event(Event({
+                    trigger = 'after',
+                    delay = 0.2,
+                    func = function()
+                        play_sound('tarot2')
+                        card.T.r = -0.2
+                        card:juice_up(0.3, 0.4)
+                        card.states.drag.is = true
+                        card.children.center.pinch.x = true
+                        G.E_MANAGER:add_event(Event({
+                            trigger = 'after',
+                            delay = 0.3,
+                            blockable = false,
+                            func = function()
+                                G.jokers:remove_card(card)
+                                card:remove()
+                                card = nil
+                                return true;
+                            end
+                        }))
+                        return true
+                    end
+                }))
+                return {
+                    card = card,
+                    message = localize('k_mksn_soldier_dead_ex'),
+                    colour = G.C.FILTER
+                }
+            else
+                card.ability.extra.mult = card.ability.extra.mult - card.ability.extra.sub_mult
+                return {
+                    card = card,
+                    message = localize('k_mksn_minus_five_ex'),
+                    colour = G.C.RED
+                }
+            end
+        end
+    end
+}
+
+SMODS.Joker {
+    key = "underdog",
+    rarity = 2,
+    pos = {
+        x = 3,
+        y = 4
+    },
+    atlas = "Jokers",
+    cost = 7,
+    unlocked = true,
+    blueprint_compat = true,
+    eternal_compat = true,
+    perishable_compat = true,
+    soul_pos = nil,
+
+    config = {extra = {unluck = 0}},
+    loc_vars = function(self, info_queue, card)
+        return {
+            vars = {
+                card.ability.extra.unluck
+            }
+        }
+    end,
+
+    calculate = function(self, card, context)
+        if context.pseudorandom_result and not context.result and not context.blueprint then
+            local trigger_time = 0
+            card.ability.extra.unluck = card.ability.extra.unluck + 1
+            if card.ability.extra.unluck >= 3 then
+                card.ability.extra.unluck = 0
+                trigger_time = trigger_time + 1
+                if trigger_time == 1 and #G.consumeables.cards + G.GAME.consumeable_buffer < G.consumeables.config.card_limit then
+                    G.E_MANAGER:add_event(Event({
+                        func = function()
+                            local card_type = 'Spectral'
+                            G.GAME.consumeable_buffer = G.GAME.consumeable_buffer + 1
+                            G.E_MANAGER:add_event(Event({
+                            trigger = 'before',
+                            delay = 0.0,
+                            func = (function()
+                                local card = create_card(card_type,G.consumeables, nil, nil, nil, nil, nil, 'sup')
+                                card:add_to_deck()
+                                G.consumeables:emplace(card)
+                                G.GAME.consumeable_buffer = 0
+                                return true
+                            end)}))
+                            return {
+                                message = localize('k_plus_spectral'),
+                                colour = G.C.SECONDARY_SET.Spectral,
+                                card = self
+                            }
+                        end  
+                    }))
+                end
+            else
+                return {
+                    message = localize('k_upgrade_ex'),
+                    colour = G.C.ORANGE
+                }
+            end
+        end
+        if context.pseudorandom_result and context.result and not context.blueprint then
+            card.ability.extra.unluck = 0
+            return {
+                message = localize('k_reset'),
+                colour = G.C.ORANGE
+            }
+        end
+    end
+}
+
+SMODS.Joker {
+    key = "sommers",
+    rarity = 4,
+    pos = {
         x = 0,
         y = 5
+    },
+    soul_pos = {
+        x = 0,
+        y = 6
     },
     atlas = "Jokers",
     cost = 20,

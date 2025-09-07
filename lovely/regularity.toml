@@ -1,0 +1,52 @@
+[manifest]
+version = "1.0.0"
+dump_lua = true
+priority = 1
+
+    # Changing chances of Soul and Black Hole
+[[patches]]
+[patches.pattern]
+target = "functions/common_events.lua"
+pattern = '''
+if (_type == 'Tarot' or _type == 'Spectral' or _type == 'Tarot_Planet') and
+not (G.GAME.used_jokers['c_soul'] and not SMODS.showman('c_soul')) then
+    if pseudorandom('soul_'.._type..G.GAME.round_resets.ante) > 0.997 then
+        forced_key = 'c_soul'
+    end
+end
+if (_type == 'Planet' or _type == 'Spectral') and
+not (G.GAME.used_jokers['c_black_hole'] and not SMODS.showman('c_black_hole')) then
+    if pseudorandom('soul_'.._type..G.GAME.round_resets.ante) > 0.997 then
+        forced_key = 'c_black_hole'
+    end
+end
+'''
+position = "at"
+payload = '''
+if (_type == 'Tarot' or _type == 'Spectral' or _type == 'Tarot_Planet') and
+not (G.GAME.used_jokers['c_soul'] and not SMODS.showman('c_soul')) then
+    if G.GAME.used_vouchers['v_mksn_regularity'] then
+        if pseudorandom('soul_'.._type..G.GAME.round_resets.ante) > 0.95 then
+            forced_key = 'c_soul'
+        end
+    else
+        if pseudorandom('soul_'.._type..G.GAME.round_resets.ante) > 0.997 then
+            forced_key = 'c_soul'
+        end
+    end
+end
+if (_type == 'Planet' or _type == 'Spectral') and
+not (G.GAME.used_jokers['c_black_hole'] and not SMODS.showman('c_black_hole')) then
+    if G.GAME.used_vouchers['v_mksn_regularity'] then
+        if pseudorandom('soul_'.._type..G.GAME.round_resets.ante) > 0.95 then
+            forced_key = 'c_black_hole'
+        end
+    else
+        if pseudorandom('soul_'.._type..G.GAME.round_resets.ante) > 0.997 then
+            forced_key = 'c_black_hole'
+        end
+    end
+end
+'''
+match_indent = true
+times = 1

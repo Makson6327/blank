@@ -1,0 +1,20 @@
+[manifest]
+version = "1.0.0"
+dump_lua = true
+priority = 1
+
+    # Changing size of booster packs
+[[patches]]
+[patches.pattern]
+target = "card.lua"
+pattern = '''
+local _size = math.max(1, self.ability.extra + (G.GAME.modifiers.booster_size_mod or 0))
+'''
+position = "after"
+payload = '''
+if G.GAME.used_vouchers['v_mksn_deviation'] then
+    _size = _size + 1
+end
+'''
+match_indent = true
+times = 1

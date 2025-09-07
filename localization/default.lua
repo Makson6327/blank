@@ -252,6 +252,21 @@ return {
                     "shop is free",
                 }
             },
+            v_mksn_deviation = {
+                name = "Deviation",
+                text = {
+                    "{C:attention}+1{} card available",
+                    "in booster pack",
+                }
+            },
+            v_mksn_regularity = {
+                name = "Regularity",
+                text = {
+                    "{C:spectral,T:c_black_hole}Black Hole{} and {C:spectral,T:c_soul}Soul{} cards",
+                    "have bigger chance",
+                    "to appear",
+                }
+            },
         },
         Joker = {
             j_mksn_ace_ace_baby = {
@@ -295,6 +310,15 @@ return {
                     "Retrigger all played {C:attention}#1#{}",
                     "{C:attention}#2#{} additional times,",
                     "rank changes every round",
+                }
+            },
+            j_mksn_bottlers = {
+                name = "Bottle Caps",
+                text = {
+                    "{C:chips}+#1#{} chips for",
+                    "each {C:money}$#4#{} you have",
+                    "under {C:money}$#3#{}",
+                    "{C:inactive}(Currently {C:chips}+#2#{C:inactive} chips)",
                 }
             },
             j_mksn_brownies = {
@@ -381,6 +405,15 @@ return {
                     "If played hand contains",
                     "scoring {C:attention}Jack{}, destroy all",
                     "non-Jack cards in played hand",
+                },
+            },
+            j_mksn_pootis_engage = {
+                name = "Jimbos Engage",
+                text = {
+                    "{X:mult,C:white} X#1# {} Mult if",
+                    "there's exactly",
+                    "two Jokers other than",
+                    "{C:attention}Jimbos Engage"
                 },
             },
             j_mksn_kaleidoscope = {
@@ -513,6 +546,15 @@ return {
                     "{C:mult}+#1#{} Mult when scored",
                 },
             },
+            j_mksn_soldier = {
+                name = "Soldier Joker",
+                text = {
+                    "{C:mult}+#1#{} Mult",
+                    "{C:mult}-#2#{} Mult at the end",
+                    "of each Small",
+                    "and Big Blind"
+                },
+            },
             j_mksn_sommers = {
                 name = "Sommers",
                 text = {
@@ -576,6 +618,15 @@ return {
                     "has random levels",
                 },
             },
+            j_mksn_underdog = {
+                name = "Underdog",
+                text = {
+                    "Create a {C:spectral}Spectral{} card",
+                    "when probability check",
+                    "fails {C:attention}3{} consecutive times",
+                    "{C:inactive}(Currently {C:attention}#1#{C:inactive} fail)",
+                },
+            },
             j_mksn_wild = {
                 name = "Wild Joker",
                 text = {
@@ -617,7 +668,8 @@ return {
             k_mksn_creature_guy_ex = "Crowd!",
             k_mksn_landing_ex = "Slowing!",
 
-            k_mksn_soldier_dead_ex = "F"
+            k_mksn_soldier_dead_ex = "F",
+            k_mksn_minus_five_ex = "-5"
         }
     }
 }
