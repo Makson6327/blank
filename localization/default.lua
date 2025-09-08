@@ -623,7 +623,7 @@ return {
                 text = {
                     "Create a {C:spectral}Spectral{} card",
                     "when probability check",
-                    "fails {C:attention}3{} consecutive times",
+                    "fails {C:attention}4{} consecutive times",
                     "{C:inactive}(Currently {C:attention}#1#{C:inactive} fail)",
                 },
             },

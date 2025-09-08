@@ -3208,8 +3208,9 @@ SMODS.Joker {
     calculate = function(self, card, context)
         if context.pseudorandom_result and not context.result and not context.blueprint then
             local trigger_time = 0
+            local space = G.consumeables.config.card_limit - #G.consumeables.cards
             card.ability.extra.unluck = card.ability.extra.unluck + 1
-            if card.ability.extra.unluck >= 3 then
+            if card.ability.extra.unluck >= 4 then
                 card.ability.extra.unluck = 0
                 trigger_time = trigger_time + 1
                 if trigger_time == 1 and #G.consumeables.cards + G.GAME.consumeable_buffer < G.consumeables.config.card_limit then
