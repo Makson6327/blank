@@ -352,6 +352,12 @@ SMODS.Back {
             }
         }
     end,
+    apply = function (self)
+        G.E_MANAGER:add_event(Event({func = function()
+            self.config.extra.blinds_skipped = 0
+			return true 
+		end}))
+    end,
     calculate = function(self, card, context)
 		if context.skip_blind then
             self.config.extra.blinds_skipped = self.config.extra.blinds_skipped + 1
