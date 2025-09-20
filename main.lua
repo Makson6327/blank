@@ -1256,7 +1256,7 @@ SMODS.Joker {
         if context.selling_self and not context.blueprint then
             local jokers = {}
             for k, v in ipairs(G.jokers.cards) do
-                if not v.edition then
+                if not v.edition and v.ability.name ~= 'j_mksn_mushroom' then
                     jokers[#jokers + 1] = v
                 end
             end
