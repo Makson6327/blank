@@ -2057,7 +2057,7 @@ SMODS.Joker {
     calculate = function(self, card, context)
         if context.joker_main and context.cardarea == G.jokers then
             if (context.scoring_name == 'Flush' and not next(context.poker_hands['Pair'])) or
-                (context.scoring_name == 'Straight') or
+                (context.scoring_name == 'Straight' and not next(context.poker_hands['Pair'])) or
                 (context.scoring_name == 'Pair') or
                 (context.scoring_name == 'High Card') then
                 return {
