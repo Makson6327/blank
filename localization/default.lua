@@ -179,6 +179,23 @@ return {
                     "{C:attention}#2#s",
                 },
             },
+            c_mksn_completion = {
+                name = "Completion",
+                text = {
+                    "Gives {C:money}$#1#{} for each",
+                    "consumable held",
+                    "(Max of {C:money}$#2#{C:inactive})",
+                    "{C:inactive}(Currently {C:money}$#3#{C:inactive})",
+                },
+            },
+            c_mksn_creativity = {
+                name = "Creativity",
+                text = {
+                    "Add a random {C:attention}Seal{}",
+                    "to {C:attention}1{} selected",
+                    "card in your hand",
+                },
+            },
         },
         Other = {
             mksn_large = {
@@ -269,6 +286,15 @@ return {
             },
         },
         Joker = {
+            j_mksn_agent = {
+                name = "007 Agent",
+                text = {
+                    "If {C:attention}played hand{} is",
+                    "a single {C:attention}7{}, enhance it,",
+                    "add random {C:dark_edition}Edition{}",
+                    "and random {C:attention}Seal{}",
+                },
+            },
             j_mksn_ace_ace_baby = {
                 name = "Ace Ace Baby",
                 text = {
@@ -276,6 +302,22 @@ return {
                     "{C:mult}+#2#{} Mult when each",
                     "played {C:attention}Ace{} is scored",
                     "{C:inactive}(Currently {C:mult}+#1#{C:inactive} Mult)",
+                },
+            },
+            j_mksn_attorney = {
+                name = "Ace Attorney",
+                text = {
+                    "If {C:attention}first hand{} of round",
+                    "contains single card,",
+                    "set rank to {C:attention}Ace{}",
+                },
+            },
+            j_mksn_ambulance = {
+                name = "Ambulance Siren",
+                text = {
+                    "Gain {C:blue}+1{} hand",
+                    "or {C:red}+1{} discard",
+                    "when {C:attention}Blind{} is selected",
                 },
             },
             j_mksn_artwork = {
@@ -318,13 +360,12 @@ return {
                     "{C:chips}+#1#{} chips for",
                     "each {C:money}$#4#{} you have",
                     "under {C:money}$#3#{}",
-                    "{C:inactive}(Currently {C:chips}+#2#{C:inactive} chips)",
                 }
             },
             j_mksn_brownies = {
                 name = "Brownies",
                 text = {
-                    "Adds a random {C:dark_edition}edition{} to",
+                    "Adds a random {C:dark_edition}Edition{} to",
                     "every scoring card",
                     "This card is destroyed",
                     "after {C:attention}#1#{} scored cards",
@@ -348,12 +389,35 @@ return {
                     "{S:1.1,C:red,E:2}self destructs{}",
                 },
             },
+            j_mksn_clockwork_jaw = {
+                name = "Clockwork Jaw",
+                text = {
+                    "Destroy {C:attention}first{} played",
+                    "card used in scoring",
+                },
+            },
             j_mksn_compact_disc = {
                 name = "Compact Disc",
                 text = {
                     "This Joker gains {C:mult}+#2#{} Mult",
                     "for each card {C:attention}sold",
                     "{C:inactive}(Currently {C:mult}+#1#{C:inactive} Mult)",
+                },
+            },
+            j_mksn_dealer = {
+                name = "Dealer",
+                text = {
+                    "This Joker gains {X:mult,C:white} X#2# {} Mult",
+                    "for each card {C:attention}played",
+                    "{C:inactive}(Currently {X:mult,C:white} X#1# {C:inactive} Mult)",
+                },
+            },
+            j_mksn_magazine = {
+                name = "Extra Magazine",
+                text = {
+                    "Score all cards",
+                    "held in hand",
+                    "{C:inactive}(Editions don't score)",
                 },
             },
             j_mksn_firestarter = {
@@ -365,6 +429,25 @@ return {
                     "{C:inactive}(Currently {X:mult,C:white} X#1# {C:inactive} Mult)",
                 },
             },
+            j_mksn_flamethrower = {
+                name = "Flamethrower",
+                text = {
+                    "Removes {C:dark_edition}Editions{} from",
+                    "cards held in hand",
+                    "at the end of round",
+                    "and gains {X:mult,C:white} X#2# {} Mult per",
+                    "Edition removed",
+                    "{C:inactive}(Currently {X:mult,C:white} X#1# {C:inactive} Mult)",
+                },
+            },
+            j_mksn_flare = {
+                name = "Flare Gun",
+                text = {
+                    "If Blind was defeated",
+                    "with no hands remaining",
+                    "create random {C:attention}Tag{}",
+                },
+            },
             j_mksn_flushbang = {
                 name = "Flushbang",
                 text = {
@@ -372,6 +455,14 @@ return {
                     "hand contains a Flush",
                     "and has scoring cards",
                     "of two different {C:attention}suits",
+                },
+            },
+            j_mksn_gardener = {
+                name = "Gardener",
+                text = {
+                    "{C:red}+#1#{} Mult if",
+                    "{C:attention}five{} or more",
+                    "cards held in hand",
                 },
             },
             j_mksn_graffiti = {
@@ -399,6 +490,16 @@ return {
                     "{C:inactive}(Must have room)",
                 },
             },
+            j_mksn_inharitance = {
+                name = "Inharitance",
+                text = {
+                    "{C:mult}+#1#{} Mult and {C:chips}+#2#{} Chips",
+                    "every time a {C:attention}Sterling{} card",
+                    "{C:green}successfully{} triggers",
+                    "Resets at the end of Ante",
+                    "{C:inactive}(Currently {C:red}+#3#{C:inactive} Mult and {C:blue}+#4#{C:inactive} Chips)",
+                },
+            },
             j_mksn_jack_reaper = {
                 name = "Jack the Reaper",
                 text = {
@@ -413,7 +514,25 @@ return {
                     "{X:mult,C:white} X#1# {} Mult if",
                     "there's exactly",
                     "two Jokers other than",
-                    "{C:attention}Jimbos Engage"
+                    "{C:attention}Jimbos Engage",
+                },
+            },
+            j_mksn_artist = {
+                name = "Joker Artist",
+                text = {
+                    "{C:attention}Stained{} cards always",
+                    "gives {X:mult,C:white} X1.2 {} Mult",
+                },
+            },
+            j_mksn_joker_doom = {
+                name = "Joker Doom",
+                text = {
+                    "{C:chips}+#2#{} Chips if",
+                    "played hand contains a {C:attention}7{}",
+                    "{C:chips}-#3#{} Chips if",
+                    "played hand contains a {C:attention}non-7{}",
+                    "{C:inactive}(Currently {C:chips}#1#{C:inactive} Chips)",
+                    "{C:inactive}(May go negative)",
                 },
             },
             j_mksn_kaleidoscope = {
@@ -424,6 +543,14 @@ return {
                     "if it contains a",
                     "{C:diamonds}Diamond{} card, {C:clubs}Club{} card,",
                     "{C:hearts}Heart{} card, and {C:spades}Spade{} card",
+                },
+            },
+            j_mksn_keycard = {
+                name = "Keycard",
+                text = {
+                    "{X:mult,C:white} X#2# {} Mult per Ante",
+                    "above Ante {C:attention}1{}",
+                    "{C:inactive}(Currently {X:mult,C:white} X#1# {C:inactive} Mult)",
                 },
             },
             j_mksn_lightning = {
@@ -563,6 +690,20 @@ return {
                     "{C:inactive}(Currently {X:mult,C:white} X#2# {C:inactive} Mult)",
                 },
             },
+            j_mksn_the_suit = {
+                name = "Suit",
+                text = {
+                    "{X:mult,C:white} X#1# {} Mult",
+                    "on Blinds with effects",
+                },
+            },
+            j_mksn_stain_glass = {
+                name = "Stained Glass",
+                text = {
+                    "Add {C:dark_edition}Polychrome{}",
+                    "to scored {C:attention}Glass{} cards"
+                },
+            },
             j_mksn_strangelet = {
                 name = "Strange Matter",
                 text = {
@@ -630,9 +771,10 @@ return {
             j_mksn_wild = {
                 name = "Wild Joker",
                 text = {
-                    "All played {C:attention}Wild{} cards",
-                    "become {C:dark_edition}Polychrome{} cards",
-                    "when scored",
+                    "Retrigger played cards",
+                    "with most frequent suit",
+                    "in your full deck",
+                    "{C:inactive}(Currently {C:attention}#3#{C:inactive})",
                 },
             },
             j_mksn_wine = {
@@ -669,7 +811,8 @@ return {
             k_mksn_landing_ex = "Slowing!",
 
             k_mksn_soldier_dead_ex = "F",
-            k_mksn_minus_five_ex = "-5"
-        }
+            k_mksn_minus_five_ex = "-5",
+            k_mksn_plus_tag = "+1 Tag"
+        },
     }
 }

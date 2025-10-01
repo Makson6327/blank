@@ -664,6 +664,69 @@ SMODS.Consumable{
     end,
 }
 
+SMODS.Consumable{
+    key = 'completion',
+    set = 'Tarot',
+    atlas = 'Consumables',
+    pos = {
+        x = 3,
+        y = 1
+    },
+
+    config = {bonus = 8, limit = 80},
+
+    set_card_type_badge = function(self, card, badges)
+        badges[1] = create_badge(G.localization.misc.dictionary.mksn_osho_zen_tarot, get_type_colour(self or card.config, card), nil, 1.2)
+    end,
+
+    loc_vars = function(self, info_queue)
+        local reward = 0
+        if G.consumeables then
+            reward = #G.consumeables.cards * self.config.bonus
+        end
+        return {vars = {self.config.bonus, self.config.limit, (reward <= self.config.limit) and reward or self.config.limit}}
+    end,
+
+    use = function(self, card)
+        local reward = #G.consumeables.cards * self.config.bonus
+        ease_dollars((reward <= self.config.limit) and reward or self.config.limit)
+    end,
+    
+    can_use = function(self, card)
+        return true
+    end
+}
+
+SMODS.Consumable{
+    key = 'creativity',
+    set = 'Tarot',
+    atlas = 'Consumables',
+    pos = {
+        x = 4,
+        y = 1
+    },
+
+    set_card_type_badge = function(self, card, badges)
+        badges[1] = create_badge(G.localization.misc.dictionary.mksn_osho_zen_tarot, get_type_colour(self or card.config, card), nil, 1.2)
+    end,
+
+    use = function(self, card)
+        local conv_card = G.hand.highlighted[1]
+        G.E_MANAGER:add_event(Event({
+            trigger = 'after',
+            delay = 0.1,
+            func = function()
+                conv_card:set_seal(SMODS.poll_seal({ guaranteed = true, type_key = 'creative' }))
+                return true
+            end
+        }))
+    end,
+    
+    can_use = function(self, card)
+        return #G.hand.highlighted == 1
+    end
+}
+
 
 
 ---------------- Enhancements ----------------
@@ -714,7 +777,7 @@ SMODS.Enhancement {
         }
     end,
     calculate = function(self, card, context)
-        if context.cardarea == G.play and context.main_scoring then
+        if context.cardarea == G.play and context.main_scoring and not next(SMODS.find_card('j_mksn_artist')) then
             local opt = pseudorandom("stained_card", 1, 4)
             if opt == 1 then
                 return {
@@ -729,6 +792,10 @@ SMODS.Enhancement {
                     chips = card.ability.extra.chips
                 }
             end
+        elseif context.cardarea == G.play and context.main_scoring and next(SMODS.find_card('j_mksn_artist')) then
+            return {
+                xmult = card.ability.extra.xmult
+            }
         end
     end
 }
@@ -940,6 +1007,7 @@ SMODS.Voucher{
 
 
 ---------------- Jokers ----------------
+
 SMODS.Joker {
     key = "cute_seal",
     rarity = 1,
@@ -1444,8 +1512,8 @@ SMODS.Joker {
 
     calculate = function(self, card, context)
         if context.individual and context.cardarea == G.play then
-            if SMODS.has_enhancement(context.other_card, 'm_stone') or
-            SMODS.has_enhancement(context.other_card, 'm_mksn_scratched') then
+            if not context.other_card:is_suit("Spades") and not context.other_card:is_suit("Hearts")
+            and not context.other_card:is_suit("Clubs") and not context.other_card:is_suit("Diamonds") then
                 return {
                     mult = card.ability.extra.mult
                 }
@@ -1480,8 +1548,8 @@ SMODS.Joker {
 
     calculate = function(self, card, context)
         if context.repetition and context.cardarea == G.play then
-            if SMODS.has_enhancement(context.other_card, 'm_stone') or
-            SMODS.has_enhancement(context.other_card, 'm_mksn_scratched') then
+            if not context.other_card:is_suit("Spades") and not context.other_card:is_suit("Hearts")
+            and not context.other_card:is_suit("Clubs") and not context.other_card:is_suit("Diamonds") then
                 return {
                     message = localize('k_again_ex'),
                     repetitions = card.ability.extra.repetitions,
@@ -1547,44 +1615,46 @@ SMODS.Joker {
     atlas = "Jokers",
     cost = 7,
     unlocked = true,
-    blueprint_compat = false,
+    blueprint_compat = true,
     eternal_compat = true,
     perishable_compat = true,
     soul_pos = nil,
 
+    config = {extra = {repetitions = 1, suit_count = 0, suit = nil}},
     loc_vars = function(self, info_queue, card)
-        info_queue[#info_queue + 1] = G.P_CENTERS.m_wild
-        return nil
-    end,
-
-    in_pool = function(self, args)
-        for k, v in pairs(G.playing_cards) do
-            if SMODS.has_enhancement(v, 'm_wild') then
-                return true
-            end
-        end
-        return false
+        return {
+            vars = {
+                card.ability.extra.repetitions,
+                card.ability.extra.suit_count,
+                card.ability.extra.suit
+            }
+        }
     end,
 
     calculate = function(self, card, context)
-        if context.before then
-            if context.scoring_hand then
-                local wilds = {}
-                for i = 1, #context.scoring_hand do
-                    if context.scoring_hand[i]:get_edition() == nil and SMODS.has_enhancement(context.scoring_hand[i], 'm_wild') then
-                        table.insert(wilds, context.scoring_hand[i])
-                    end
-                end
-                if #wilds > 0 then 
-                    for i = 1, #wilds do
-                        local other_card = wilds[i]
-                        other_card:set_edition({polychrome = true})
-                    end
-                    return {
-                        message = localize('k_upgrade_ex'),
-                        colour = G.C.DARK_EDITION,
-                        ard = self
-                    }
+        if context.repetition and context.cardarea == G.play then
+            if context.other_card:is_suit(card.ability.extra.suit ) then
+                return {
+                    message = localize('k_again_ex'),
+                    repetitions = card.ability.extra.repetitions,
+                    card = card
+                }
+            end
+        end
+    end,
+    
+    update = function(self, card, front)
+        if G.playing_cards ~= nil then
+            local suit_tallies = { ['Spades'] = 0, ['Hearts'] = 0, ['Clubs'] = 0, ['Diamonds'] = 0 }
+            
+            for k, v in ipairs(G.playing_cards) do
+                suit_tallies[v.base.suit] = (suit_tallies[v.base.suit] or 0) + 1
+            end
+
+            for k, v in pairs(suit_tallies) do
+                if v > card.ability.extra.suit_count then
+                    card.ability.extra.suit = k
+                    card.ability.extra.suit_count = v
                 end
             end
         end
@@ -3012,13 +3082,13 @@ SMODS.Joker {
 
 SMODS.Joker {
     key = "ufo",
-    rarity = 2,
+    rarity = 1,
     pos = {
         x = 9,
         y = 3
     },
     atlas = "Jokers",
-    cost = 6,
+    cost = 5,
     unlocked = true,
     blueprint_compat = false,
     eternal_compat = true,
@@ -3183,13 +3253,13 @@ SMODS.Joker {
 
 SMODS.Joker {
     key = "underdog",
-    rarity = 2,
+    rarity = 3,
     pos = {
         x = 3,
         y = 4
     },
     atlas = "Jokers",
-    cost = 7,
+    cost = 8,
     unlocked = true,
     blueprint_compat = false,
     eternal_compat = true,
@@ -3254,15 +3324,741 @@ SMODS.Joker {
 }
 
 SMODS.Joker {
-    key = "sommers",
-    rarity = 4,
+    key = "clockwork_jaw",
+    rarity = 2,
+    pos = {
+        x = 4,
+        y = 4
+    },
+    atlas = "Jokers",
+    cost = 6,
+    unlocked = true,
+    blueprint_compat = false,
+    eternal_compat = true,
+    perishable_compat = true,
+    soul_pos = nil,
+    
+    config = {extra = {trash_list = {}}},
+
+    calculate = function(self, card, context)
+        if context.after and not context.blueprint then
+            table.insert(card.ability.extra.trash_list, context.scoring_hand[1])
+            local trash_list = card.ability.extra.trash_list
+            G.E_MANAGER:add_event(Event({
+                trigger = 'before',
+                delay = 0.7,
+                func = function()
+                    for _, card_to_trash in ipairs(trash_list) do
+                        if not card_to_trash.removed then
+                            card_to_trash:start_dissolve(nil, nil)
+                        end
+                    end
+                    return true
+            end}))
+            for _, card_to_trash in ipairs(trash_list) do
+                card_to_trash.destroyed = true
+            end
+            SMODS.calculate_context({remove_playing_cards = true, removed = trash_list})
+            card.ability.extra.trash_list = {}
+        end
+    end
+}
+
+SMODS.Joker {
+    key = "joker_doom",
+    rarity = 3,
+    pos = {
+        x = 5,
+        y = 4
+    },
+    atlas = "Jokers",
+    cost = 8,
+    unlocked = true,
+    blueprint_compat = true,
+    eternal_compat = true,
+    perishable_compat = true,
+    soul_pos = nil,
+
+    config = {extra = {chips = 0, plus_chips = 30, minus_chips = 15}},
+    loc_vars = function(self, info_queue, card)
+        return {
+            vars = {
+                card.ability.extra.chips,
+                card.ability.extra.plus_chips,
+                card.ability.extra.minus_chips,
+            }
+        }
+    end,
+
+    calculate = function(self, card, context)
+        if context.before and not context.blueprint then
+            local seven = false
+            local non_seven = false
+            for i = 1, #context.scoring_hand do
+                if context.scoring_hand[i]:get_id() == 7 then
+                    seven = true
+                elseif context.scoring_hand[i]:get_id() ~= 7 then
+                    non_seven = true
+                end
+            end
+            if seven then
+                card.ability.extra.chips = card.ability.extra.chips + card.ability.extra.plus_chips
+            end
+            if non_seven then
+                card.ability.extra.chips = card.ability.extra.chips - card.ability.extra.minus_chips
+            end
+            if seven or non_seven then
+                return {
+                    message = localize('k_upgrade_ex'),
+                    colour = G.C.PURPLE
+                }
+            end
+        end
+
+        if context.joker_main and context.cardarea == G.jokers then
+            return {
+                chips = card.ability.extra.chips
+            }
+        end
+    end
+}
+
+SMODS.Joker {
+    key = "agent",
+    rarity = 2,
+    pos = {
+        x = 6,
+        y = 4
+    },
+    atlas = "Jokers",
+    cost = 7,
+    unlocked = true,
+    blueprint_compat = false,
+    eternal_compat = true,
+    perishable_compat = true,
+    soul_pos = nil,
+
+    calculate = function(self, card, context)
+        if context.before and not context.blueprint then
+            if #context.full_hand == 1 and context.full_hand[1]:get_id() == 7 then
+                for k, v in ipairs(context.scoring_hand) do
+                    if v.config.center == G.P_CENTERS.c_base then
+                        local new_enhancement = SMODS.poll_enhancement({guaranteed = true, key = 'oh_oh_seven'})
+                        v:set_ability(G.P_CENTERS[new_enhancement])
+                    end
+                    if not v.seal then
+                        local new_seal = SMODS.poll_seal({guaranteed = true, key = 'oh_oh_seven'})
+                        v:set_seal(new_seal, true, true)
+                    end
+                    if not v.edition then
+                        local new_edition = poll_edition('oh_oh_seven', nil, true, true)
+                        v:set_edition(new_edition, true)
+                    end
+                    G.E_MANAGER:add_event(Event({
+                        func = function()
+                            v:juice_up()
+                            return true
+                        end
+                    }))
+                end
+            end
+        end
+    end
+}
+
+SMODS.Joker {
+    key = "attorney",
+    rarity = 1,
+    pos = {
+        x = 7,
+        y = 4
+    },
+    atlas = "Jokers",
+    cost = 5,
+    unlocked = true,
+    blueprint_compat = false,
+    eternal_compat = true,
+    perishable_compat = true,
+    soul_pos = nil,
+
+    calculate = function(self, card, context)
+        if context.before and not context.blueprint then
+            if #context.full_hand == 1 and G.GAME.current_round.hands_played == 0 then
+                for k, v in ipairs(context.scoring_hand) do
+                    SMODS.change_base(v, nil, 'Ace')
+                    G.E_MANAGER:add_event(Event({
+                        func = function()
+                            v:juice_up()
+                            return true
+                        end
+                    }))
+                end
+            end
+        end
+    end
+}
+
+SMODS.Joker {
+    key = "stain_glass",
+    rarity = 2,
+    pos = {
+        x = 8,
+        y = 4
+    },
+    atlas = "Jokers",
+    cost = 6,
+    unlocked = true,
+    blueprint_compat = false,
+    eternal_compat = true,
+    perishable_compat = true,
+    soul_pos = nil,
+
+    loc_vars = function(self, info_queue, card)
+        info_queue[#info_queue + 1] = G.P_CENTERS.m_glass
+        return nil
+    end,
+
+    in_pool = function(self, args)
+        for k, v in pairs(G.playing_cards) do
+            if SMODS.has_enhancement(v, 'm_glass') then
+                return true
+            end
+        end
+        return false
+    end,
+
+    calculate = function(self, card, context)
+        if context.before then
+            if context.scoring_hand then
+                local glasses = {}
+                for i = 1, #context.scoring_hand do
+                    if context.scoring_hand[i]:get_edition() == nil and SMODS.has_enhancement(context.scoring_hand[i], 'm_glass') then
+                        table.insert(glasses, context.scoring_hand[i])
+                    end
+                end
+                if #glasses > 0 then 
+                    for i = 1, #glasses do
+                        local other_card = glasses[i]
+                        other_card:set_edition({polychrome = true})
+                    end
+                    return {
+                        message = localize('k_upgrade_ex'),
+                        colour = G.C.DARK_EDITION,
+                        ard = self
+                    }
+                end
+            end
+        end
+    end
+}
+
+SMODS.Joker {
+    key = "keycard",
+    rarity = 3,
+    pos = {
+        x = 9,
+        y = 4
+    },
+    atlas = "Jokers",
+    cost = 8,
+    unlocked = true,
+    blueprint_compat = true,
+    eternal_compat = true,
+    perishable_compat = true,
+    soul_pos = nil,
+
+    config = {extra = {xmult = 1, plus_xmult = 0.25}},
+    loc_vars = function(self, info_queue, card)
+        return {
+            vars = {
+                card.ability.extra.xmult + card.ability.extra.plus_xmult * G.GAME.round_resets.ante - card.ability.extra.plus_xmult,
+                card.ability.extra.plus_xmult,
+            }
+        }
+    end,
+
+    calculate = function(self, card, context)
+        if context.joker_main and context.cardarea == G.jokers then
+            return {
+                xmult = card.ability.extra.xmult + card.ability.extra.plus_xmult * G.GAME.round_resets.ante - card.ability.extra.plus_xmult
+            }
+        end
+    end
+}
+
+SMODS.Joker {
+    key = "flare",
+    rarity = 2,
     pos = {
         x = 0,
         y = 5
     },
-    soul_pos = {
+    atlas = "Jokers",
+    cost = 7,
+    unlocked = true,
+    blueprint_compat = true,
+    eternal_compat = true,
+    perishable_compat = true,
+    soul_pos = nil,
+
+    calculate = function(self, card, context)
+        if context.end_of_round and not context.repetition and not context.individual then
+            if G.GAME.current_round.hands_left == 0 then
+                local tag_keys = {
+                    'tag_uncommon',
+                    'tag_rare',
+                    'tag_negative',
+                    'tag_foil',
+                    'tag_holo',
+                    'tag_polychrome',
+                    'tag_investment',
+                    'tag_voucher',
+                    'tag_boss',
+                    'tag_standard',
+                    'tag_charm',
+                    'tag_meteor',
+                    'tag_buffoon',
+                    'tag_handy',
+                    'tag_garbage',
+                    'tag_ethereal',
+                    'tag_coupon',
+                    'tag_double',
+                    'tag_juggle',
+                    'tag_d_six',
+                    'tag_top_up',
+                    'tag_skip',
+                    'tag_economy'
+                }
+                G.E_MANAGER:add_event(Event({trigger = 'immediate',func = function()
+                    local rand_tag = pseudorandom_element(tag_keys, pseudoseed('random_tag'))
+                    add_tag(Tag(rand_tag))
+                    play_sound('generic1', 0.9 + math.random()*0.1, 0.8)
+                    play_sound('holo1', 1.2 + math.random()*0.1, 0.4)
+                    return true
+                end}))
+                return {
+                    message = localize('k_mksn_plus_tag'),
+                    colour = G.C.GREEN,
+                    ard = self
+                }
+            end
+        end
+    end
+}
+
+SMODS.Joker {
+    key = "magazine",
+    rarity = 3,
+    pos = {
+        x = 1,
+        y = 5
+    },
+    atlas = "Jokers",
+    cost = 10,
+    unlocked = true,
+    blueprint_compat = true,
+    eternal_compat = true,
+    perishable_compat = true,
+    soul_pos = nil,
+
+    config = {extra = {xmult = 0, mult = 0, chips = 0, dollars = 0}},
+    loc_vars = function(self, info_queue, card)
+        return {
+            vars = {
+                card.ability.extra.xmult,
+                card.ability.extra.mult,
+                card.ability.extra.chips,
+                card.ability.extra.dollars,
+            }
+        }
+    end,
+
+    calculate = function(self, card, context)
+        if context.individual and context.cardarea == G.hand and not context.end_of_round then
+            card.ability.extra.xmult = 0
+            card.ability.extra.mult = 0
+            card.ability.extra.chips = 0
+            card.ability.extra.dollars = 0
+
+            if context.other_card:get_id() == 2 then
+                card.ability.extra.chips = card.ability.extra.chips + 2
+            elseif context.other_card:get_id() == 3 then
+                card.ability.extra.chips = card.ability.extra.chips + 3
+            elseif context.other_card:get_id() == 4 then
+                card.ability.extra.chips = card.ability.extra.chips + 4
+            elseif context.other_card:get_id() == 5 then
+                card.ability.extra.chips = card.ability.extra.chips + 5
+            elseif context.other_card:get_id() == 6 then
+                card.ability.extra.chips = card.ability.extra.chips + 6
+            elseif context.other_card:get_id() == 7 then
+                card.ability.extra.chips = card.ability.extra.chips + 7
+            elseif context.other_card:get_id() == 8 then
+                card.ability.extra.chips = card.ability.extra.chips + 8
+            elseif context.other_card:get_id() == 9 then
+                card.ability.extra.chips = card.ability.extra.chips + 9
+            elseif context.other_card:get_id() == 10 then
+                card.ability.extra.chips = card.ability.extra.chips + 10
+            elseif context.other_card:get_id() == 11 then
+                card.ability.extra.chips = card.ability.extra.chips + 10
+            elseif context.other_card:get_id() == 12 then
+                card.ability.extra.chips = card.ability.extra.chips + 10
+            elseif context.other_card:get_id() == 13 then
+                card.ability.extra.chips = card.ability.extra.chips + 10
+            elseif context.other_card:get_id() == 14 then
+                card.ability.extra.chips = card.ability.extra.chips + 11
+            end
+
+            if SMODS.has_enhancement(context.other_card, 'm_bonus') then
+                card.ability.extra.chips = card.ability.extra.chips + 30
+            elseif SMODS.has_enhancement(context.other_card, 'm_mult') then
+                card.ability.extra.mult = card.ability.extra.mult + 4
+            elseif SMODS.has_enhancement(context.other_card, 'm_glass') then
+                card.ability.extra.xmult = card.ability.extra.xmult + 2
+            elseif SMODS.has_enhancement(context.other_card, 'm_stone') then
+                card.ability.extra.chips = card.ability.extra.chips + 50
+            elseif SMODS.has_enhancement(context.other_card, 'm_lucky') then
+                if SMODS.pseudorandom_probability(context.other_card, 'lucky_mult', 1, 5) then
+                    card.ability.extra.mult = card.ability.extra.mult + 20
+                end
+            elseif SMODS.has_enhancement(context.other_card, 'm_mksn_sterling') then
+                if SMODS.pseudorandom_probability(context.other_card, 'silver', 1, 2) then
+                    card.ability.extra.dollars = card.ability.extra.dollars + 1
+                end
+            elseif SMODS.has_enhancement(context.other_card, 'm_mksn_stained') then
+                local opt = pseudorandom("stained", 1, 4)
+                if opt == 1 then
+                    card.ability.extra.xmult = card.ability.extra.xmult + 1.2
+                elseif opt == 2 then
+                    card.ability.extra.mult = card.ability.extra.mult + 3
+                elseif opt == 3 then
+                    card.ability.extra.chips = card.ability.extra.chips + 25
+                end
+            elseif SMODS.has_enhancement(context.other_card, 'm_mksn_scratched') then
+                card.ability.extra.xmult = card.ability.extra.xmult + 2
+            end
+
+            if context.other_card:get_seal() == 'Gold' then
+                card.ability.extra.dollars = card.ability.extra.dollars + 3
+            end
+
+            if card.ability.extra.dollars > 0 and card.ability.extra.xmult > 0 then
+                return {
+                    chips = card.ability.extra.chips,
+                    mult = card.ability.extra.mult,
+                    xmult = card.ability.extra.xmult,
+                    dollars = card.ability.extra.dollars
+                }
+            elseif card.ability.extra.xmult > 0 then
+                return {
+                    chips = card.ability.extra.chips,
+                    mult = card.ability.extra.mult,
+                    xmult = card.ability.extra.xmult,
+                }
+            elseif card.ability.extra.dollars > 0 then
+                return {
+                    chips = card.ability.extra.chips,
+                    mult = card.ability.extra.mult,
+                    dollars = card.ability.extra.dollars,
+                }
+            else
+                return {
+                    chips = card.ability.extra.chips,
+                    mult = card.ability.extra.mult,
+                }
+            end
+        end
+    end
+}
+
+SMODS.Joker {
+    key = "gardener",
+    rarity = 1,
+    pos = {
+        x = 2,
+        y = 5
+    },
+    atlas = "Jokers",
+    cost = 4,
+    unlocked = true,
+    blueprint_compat = true,
+    eternal_compat = true,
+    perishable_compat = true,
+    soul_pos = nil,
+
+    config = {extra = {mult = 20}},
+    loc_vars = function(self, info_queue, card)
+        return {
+            vars = {
+                card.ability.extra.mult
+            }
+        }
+    end,
+
+    calculate = function(self, card, context)
+        if context.joker_main and context.cardarea == G.jokers then
+            if #G.hand.cards >= 5 then
+                return {
+                    mult = card.ability.extra.mult
+                }
+            end
+        end
+    end
+}
+
+SMODS.Joker {
+    key = "ambulance",
+    rarity = 2,
+    pos = {
+        x = 3,
+        y = 5
+    },
+    atlas = "Jokers",
+    cost = 7,
+    unlocked = true,
+    blueprint_compat = false,
+    eternal_compat = true,
+    perishable_compat = true,
+    soul_pos = nil,
+    
+    calculate = function(self, card, context)
+        if context.setting_blind and not self.getting_sliced and not context.blueprint then
+            local opt = pseudorandom("red_n_blu", 1, 2)
+            if opt == 1 then
+                ease_hands_played(1)
+            elseif opt == 2 then
+                ease_discard(1)
+            end
+        end
+    end
+}
+
+SMODS.Joker {
+    key = "inharitance",
+    rarity = 2,
+    pos = {
+        x = 4,
+        y = 5
+    },
+    atlas = "Jokers",
+    cost = 7,
+    unlocked = true,
+    blueprint_compat = true,
+    eternal_compat = true,
+    perishable_compat = true,
+    soul_pos = nil,
+
+    config = {extra = {mult = 2, chips = 20, start_mult = 0, start_chips = 0}},
+    loc_vars = function(self, info_queue, card)
+        info_queue[#info_queue + 1] = G.P_CENTERS.m_mksn_sterling
+        return {
+            vars = {
+                card.ability.extra.mult,
+                card.ability.extra.chips,
+                card.ability.extra.start_mult,
+                card.ability.extra.start_chips
+            }
+        }
+    end,
+
+    in_pool = function(self, args)
+        for k, v in pairs(G.playing_cards) do
+            if SMODS.has_enhancement(v, 'm_mksn_sterling') then
+                return true
+            end
+        end
+        return false
+    end,
+    
+    calculate = function(self, card, context)
+        if context.joker_main and context.cardarea == G.jokers then
+            return {
+                mult = card.ability.extra.start_mult,
+                chips = card.ability.extra.start_chips
+            }
+        end
+
+        if context.pseudorandom_result and context.result and not context.blueprint and context.identifier == 'silver_money' then
+            card.ability.extra.start_mult = card.ability.extra.start_mult + card.ability.extra.mult
+            card.ability.extra.start_chips = card.ability.extra.start_chips + card.ability.extra.chips
+            return {
+                message = localize('k_upgrade_ex'),
+                colour = G.C.MULT,
+            }
+        end
+
+        if context.end_of_round and G.GAME.blind.boss and not context.repetition and not context.individual and not context.blueprint then
+            card.ability.extra.start_mult = 0
+            card.ability.extra.start_chips = 0
+            return {
+                message = localize('k_reset'),
+                colour = G.C.MULT
+            }
+        end
+    end
+}
+
+SMODS.Joker {
+    key = "artist",
+    rarity = 2,
+    pos = {
+        x = 5,
+        y = 5
+    },
+    atlas = "Jokers",
+    cost = 6,
+    unlocked = true,
+    blueprint_compat = false,
+    eternal_compat = true,
+    perishable_compat = true,
+    soul_pos = nil,
+
+    loc_vars = function(self, info_queue, card)
+        info_queue[#info_queue + 1] = G.P_CENTERS.m_mksn_stained
+        return nil
+    end,
+
+    in_pool = function(self, args)
+        for k, v in pairs(G.playing_cards) do
+            if SMODS.has_enhancement(v, 'm_mksn_stained') then
+                return true
+            end
+        end
+        return false
+    end,
+}
+
+SMODS.Joker {
+    key = "dealer",
+    rarity = 2,
+    pos = {
+        x = 6,
+        y = 5
+    },
+    atlas = "Jokers",
+    cost = 7,
+    unlocked = true,
+    blueprint_compat = true,
+    eternal_compat = true,
+    perishable_compat = true,
+    soul_pos = nil,
+
+    config = {extra = {xmult = 1, plus_xmult = 0.01}},
+    loc_vars = function(self, info_queue, card)
+        return {
+            vars = {
+                card.ability.extra.xmult,
+                card.ability.extra.plus_xmult
+            }
+        }
+    end,
+    
+    calculate = function(self, card, context)
+        if context.joker_main and context.cardarea == G.jokers then
+            return {
+                xmult = card.ability.extra.xmult
+            }
+        end
+
+        if context.before and not context.blueprint then
+            card.ability.extra.xmult = card.ability.extra.xmult + card.ability.extra.plus_xmult * #context.full_hand
+            return {
+                message = localize('k_upgrade_ex'),
+                colour = G.C.MULT,
+            }
+        end
+    end
+}
+
+SMODS.Joker {
+    key = "the_suit",
+    rarity = 1,
+    pos = {
+        x = 7,
+        y = 5
+    },
+    atlas = "Jokers",
+    cost = 5,
+    unlocked = true,
+    blueprint_compat = true,
+    eternal_compat = true,
+    perishable_compat = true,
+    soul_pos = nil,
+
+    config = {extra = {xmult = 2}},
+    loc_vars = function(self, info_queue, card)
+        return {
+            vars = {
+                card.ability.extra.xmult
+            }
+        }
+    end,
+    
+    calculate = function(self, card, context)
+        if context.joker_main and context.cardarea == G.jokers then
+            if G.GAME.blind.boss and not G.GAME.blind.disabled then
+                return {
+                    xmult = card.ability.extra.xmult
+                }
+            end
+        end
+    end
+}
+
+SMODS.Joker {
+    key = "flamethrower",
+    rarity = 3,
+    pos = {
+        x = 8,
+        y = 5
+    },
+    atlas = "Jokers",
+    cost = 8,
+    unlocked = true,
+    blueprint_compat = true,
+    eternal_compat = true,
+    perishable_compat = true,
+    soul_pos = nil,
+
+    config = {extra = {xmult = 1, plus_xmult = 0.5}},
+    loc_vars = function(self, info_queue, card)
+        return {
+            vars = {
+                card.ability.extra.xmult,
+                card.ability.extra.plus_xmult
+            }
+        }
+    end,
+    
+    calculate = function(self, card, context)
+        if context.joker_main and context.cardarea == G.jokers then
+            return {
+                xmult = card.ability.extra.xmult
+            }
+        end
+
+        if context.individual and context.cardarea == G.hand and context.end_of_round and not context.blueprint then
+            if context.other_card:get_edition() ~= nil then
+                card.ability.extra.xmult = card.ability.extra.xmult + card.ability.extra.plus_xmult
+                context.other_card.edition = nil
+                return {
+                    message = localize('k_upgrade_ex'),
+                    colour = G.C.DARK_EDITION,
+                }
+            end
+        end
+    end
+}
+
+SMODS.Joker {
+    key = "sommers",
+    rarity = 4,
+    pos = {
         x = 0,
         y = 6
+    },
+    soul_pos = {
+        x = 0,
+        y = 7
     },
     atlas = "Jokers",
     cost = 20,
@@ -3294,6 +4090,7 @@ SMODS.Joker {
 
 
 ---------------- func ----------------
+
 function SMODS.current_mod.reset_game_globals(run_start)
     -- Big Joke
     G.GAME.current_round.mksn_big_smoke.rank = '9'
