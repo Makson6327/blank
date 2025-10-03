@@ -438,6 +438,7 @@ return {
                     "and gains {X:mult,C:white} X#2# {} Mult per",
                     "Edition removed",
                     "{C:inactive}(Currently {X:mult,C:white} X#1# {C:inactive} Mult)",
+                    "{C:inactive}(Can't remove Negative from card)",
                 },
             },
             j_mksn_flare = {
@@ -690,13 +691,6 @@ return {
                     "{C:inactive}(Currently {X:mult,C:white} X#2# {C:inactive} Mult)",
                 },
             },
-            j_mksn_the_suit = {
-                name = "Suit",
-                text = {
-                    "{X:mult,C:white} X#1# {} Mult",
-                    "on Blinds with effects",
-                },
-            },
             j_mksn_stain_glass = {
                 name = "Stained Glass",
                 text = {
@@ -711,11 +705,18 @@ return {
                     "may appear in a shop"
                 },
             },
+            j_mksn_the_suit = {
+                name = "Suit",
+                text = {
+                    "{X:mult,C:white} X#1# {} Mult",
+                    "on Blinds with effects",
+                },
+            },
             j_mksn_suprematist = {
                 name = "Suprematist",
                 text = {
                     "{C:mult}+#1#{} Mult if",
-                    "played hand not contains",
+                    "played hand doesn't contain",
                     "another poker hand",
                 },
             },

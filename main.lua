@@ -4037,7 +4037,7 @@ SMODS.Joker {
         end
 
         if context.individual and context.cardarea == G.hand and context.end_of_round and not context.blueprint then
-            if context.other_card:get_edition() ~= nil then
+            if context.other_card:get_edition() ~= nil and not context.other_card.edition.negative == true then
                 card.ability.extra.xmult = card.ability.extra.xmult + card.ability.extra.plus_xmult
                 context.other_card.edition = nil
                 return {
