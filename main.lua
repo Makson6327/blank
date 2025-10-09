@@ -3942,7 +3942,7 @@ SMODS.Joker {
     perishable_compat = true,
     soul_pos = nil,
 
-    config = {extra = {xmult = 1, plus_xmult = 0.01}},
+    config = {extra = {xmult = 1, plus_xmult = 0.02}},
     loc_vars = function(self, info_queue, card)
         return {
             vars = {
