@@ -1224,7 +1224,7 @@ SMODS.Joker {
     atlas = "Jokers",
     cost = 6,
     unlocked = true,
-    blueprint_compat = true,
+    blueprint_compat = false,
     eternal_compat = false,
     perishable_compat = false,
     soul_pos = nil,
@@ -1251,7 +1251,7 @@ SMODS.Joker {
     atlas = "Jokers",
     cost = 4,
     unlocked = true,
-    blueprint_compat = false,
+    blueprint_compat = true,
     eternal_compat = false,
     perishable_compat = false,
     soul_pos = nil,
@@ -3819,15 +3819,46 @@ SMODS.Joker {
     eternal_compat = true,
     perishable_compat = true,
     soul_pos = nil,
+
+    config = {extra = {hands = 0, discards = 0}},
+    loc_vars = function(self, info_queue, card)
+        return {
+            vars = {
+                card.ability.extra.hands,
+                card.ability.extra.discards
+            }
+        }
+    end,
     
     calculate = function(self, card, context)
         if context.setting_blind and not self.getting_sliced and not context.blueprint then
             local opt = pseudorandom("red_n_blu", 1, 2)
             if opt == 1 then
-                ease_hands_played(1)
+                card.ability.extra.hands = card.ability.extra.hands + 1
+                ease_hands_played(card.ability.extra.hands)
+                ease_discard(card.ability.extra.discards)
+                return {
+                    message = localize('k_mksn_blu_hand'),
+                    colour = G.C.BLUE
+                }
             elseif opt == 2 then
-                ease_discard(1)
+                card.ability.extra.discards = card.ability.extra.discards + 1
+                ease_discard(card.ability.extra.discards)
+                ease_hands_played(card.ability.extra.hands)
+                return {
+                    message = localize('k_mksn_red_discard'),
+                    colour = G.C.RED
+                }
             end
+        end
+
+        if context.end_of_round and G.GAME.blind.boss and not context.repetition and not context.individual and not context.blueprint then
+            card.ability.extra.hands = 0
+            card.ability.extra.discards = 0
+            return {
+                message = localize('k_reset'),
+                colour = G.C.MULT
+            }
         end
     end
 }

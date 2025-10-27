@@ -318,6 +318,7 @@ return {
                     "Gain {C:blue}+1{} hand",
                     "or {C:red}+1{} discard",
                     "when {C:attention}Blind{} is selected",
+                    "until end of Ante"
                 },
             },
             j_mksn_artwork = {
@@ -813,7 +814,9 @@ return {
 
             k_mksn_soldier_dead_ex = "F",
             k_mksn_minus_five_ex = "-5",
-            k_mksn_plus_tag = "+1 Tag"
+            k_mksn_plus_tag = "+1 Tag",
+            k_mksn_blu_hand = "+1 Hand",
+            k_mksn_red_discard = "+1 Discard"
         },
     }
 }
