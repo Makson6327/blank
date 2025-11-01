@@ -4,8 +4,9 @@ return {
             b_mksn_silver = {
                 name = "Silver Deck",
                 text = {
-                    "All {C:attention}non-Enhanced{} played cards become",
-                    "{C:attention}Sterling{} cards when scored",
+                    "All {C:attention}non-Enhanced{} played cards",
+                    "become {C:attention}Sterling{} cards, {C:attention}Stained{} cards",
+                    "or {C:attention}Scratched{} cards when scored",
                 },
             },
             b_mksn_grimoire = {
@@ -49,14 +50,6 @@ return {
                     "{C:green}1 in 7{} cards in deck are",
                     "{C:dark_edition}Negative{}",
                     "{C:attention}-1{} hand size,",
-                },
-            },
-            b_mksn_radioactive = {
-                name = "Radioactive Deck",
-                text = {
-                    "{X:mult,C:white}X3{} Mult",
-                    "{C:green}#1# in 75{} chance to lose",
-                    "after defeating each {C:attention}Blind{}",
                 },
             },
             b_mksn_white_deck = {
@@ -284,6 +277,20 @@ return {
                     "to appear",
                 }
             },
+            v_mksn_cloak = {
+                name = "Cloak",
+                text = {
+                    "{C:blue}+1{} Hand during",
+                    "{C:attention}Boss Blinds",
+                }
+            },
+            v_mksn_dagger = {
+                name = "Dagger",
+                text = {
+                    "Blind size",
+                    "reduced by {C:attention}20%",
+                }
+            },
         },
         Joker = {
             j_mksn_agent = {
@@ -413,12 +420,29 @@ return {
                     "{C:inactive}(Currently {X:mult,C:white} X#1# {C:inactive} Mult)",
                 },
             },
+            j_mksn_do_it_again = {
+                name = "Do It Again!",
+                text = {
+                    "Retrigger all played cards",
+                    "if played hand contains",
+                    "a {C:attention}Bonus{} card and a {C:attention}Mult{} card",
+                },
+            },
             j_mksn_magazine = {
                 name = "Extra Magazine",
                 text = {
                     "Score all cards",
                     "held in hand",
                     "{C:inactive}(Editions don't score)",
+                },
+            },
+            j_mksn_weight = {
+                name = "Extra Weight",
+                text = {
+                    "This Joker gains {C:mult}+#1#{} Mult",
+                    "if Mult differs Chips",
+                    "at least 10 times",
+                    "{C:inactive}(Currently {C:mult}+#2#{C:inactive} Mult)",
                 },
             },
             j_mksn_firestarter = {
@@ -467,6 +491,15 @@ return {
                     "cards held in hand",
                 },
             },
+            j_mksn_gold_armor = {
+                name = "Golden Sword",
+                text = {
+                    "Played {C:attention}Gold{} cards",
+                    "gives {C:red}+#1#{} Mult",
+                    "and have {C:green}#3# in #2#{} chance", 
+                    "to break when scored",
+                },
+            },
             j_mksn_graffiti = {
                 name = "Graffiti",
                 text = {
@@ -500,6 +533,13 @@ return {
                     "{C:green}successfully{} triggers",
                     "Resets at the end of Ante",
                     "{C:inactive}(Currently {C:red}+#3#{C:inactive} Mult and {C:blue}+#4#{C:inactive} Chips)",
+                },
+            },
+            j_mksn_eightfinity = {
+                name = "Infinity I Guess",
+                text = {
+                    "Retrigger each played {C:attention}8{}",
+                    "multiple number of times",
                 },
             },
             j_mksn_jack_reaper = {
@@ -588,12 +628,29 @@ return {
                     "{C:attention}-1{} consumable slot",
                 },
             },
+            j_mksn_mirror_mirror = {
+                name = "Mirror Mirror",
+                text = {
+                    "If {C:attention}first hand{} of round",
+                    "is a {C:attention}Straight Flush{},",
+                    "create {C:attention}Negative Tag",
+                },
+            },
             j_mksn_mushroom = {
                 name = "Mushroom",
                 text = {
                     "Sell this card to",
                     "add {C:dark_edition}Polychrome{} to a",
                     "random {C:attention}Joker{}",
+                }
+            },
+            j_mksn_new_driver = {
+                name = "New Driver",
+                text = {
+                    "Prevents Death",
+                    "on Ante {C:attention}2",
+                    "or lower",
+                    "{S:1.1,C:red,E:2}self destructs{}",
                 }
             },
             j_mksn_divided_zero = {
@@ -721,6 +778,15 @@ return {
                     "another poker hand",
                 },
             },
+            j_mksn_tax_evasion = {
+                name = "Tax Evasion",
+                text = {
+                    "Create a free {C:attention}#1#",
+                    "at end of round",
+                    "if you earned at least",
+                    "{C:money}$10{} per this round"
+                },
+            },
             j_mksn_laboratory = {
                 name = "The Laboratory",
                 text = {
@@ -754,6 +820,14 @@ return {
                     "{C:inactive}(Last hand played is {C:attention}#3#{C:inactive})",
                 },
             },
+            j_mksn_two_factor = {
+                name = "Two-Factor Sign",
+                text = {
+                    "{X:mult,C:white} X4 {} Mult if",
+                    "played hand contains",
+                    "scoring {C:attention}#1#{}, {C:attention}#2#{}, {C:attention}#3#{}, {C:attention}#4#{} and {C:attention}#5#",
+                },
+            },
             j_mksn_ufo = {
                 name = "UFO",
                 text = {
@@ -768,6 +842,13 @@ return {
                     "when probability check",
                     "fails {C:attention}3{} consecutive times",
                     "{C:inactive}(Currently {C:attention}#1#{C:inactive} fail)",
+                },
+            },
+            j_mksn_we_rich = {
+                name = "We Are Rich!",
+                text = {
+                    "{X:money,C:white} X$#1# {} when first",
+                    "played card scores",
                 },
             },
             j_mksn_wild = {
