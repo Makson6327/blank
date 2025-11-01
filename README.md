@@ -2,11 +2,11 @@
 "Blank" is a Balatro mod that added new Jokers, Decks, Spectrals and many others - try Blank by yourself, i guess its very fun!
 
 All about stuff Blank is adding:
-- 60 new Jokers
+- 69 new Jokers
 - 2 new Spectral cards
 - 3 new Enhancements and 5 new Tarot cards
-- 2 pair of Vouchers
-- 11 new Decks
+- 3 pair of Vouchers
+- 10 new Decks
 - 2 new Stakes
 - 2 new Stickers
 - 1 new Seal
