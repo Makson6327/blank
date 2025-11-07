@@ -479,8 +479,7 @@ return {
                 text = {
                     "{X:mult,C:white} X#1# {} Mult if played",
                     "hand contains a Flush",
-                    "and has scoring cards",
-                    "of two different {C:attention}suits",
+                    "and a {C:attention}Wild{} card",
                 },
             },
             j_mksn_gardener = {

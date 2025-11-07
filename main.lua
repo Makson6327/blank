@@ -2421,6 +2421,7 @@ SMODS.Joker {
 
     config = {extra = {xmult = 2}},
     loc_vars = function(self, info_queue, card)
+        info_queue[#info_queue + 1] = G.P_CENTERS.m_wild
         return {
             vars = {
                 card.ability.extra.xmult
@@ -2428,48 +2429,30 @@ SMODS.Joker {
         }
     end,
 
+    in_pool = function(self, args)
+        for k, v in pairs(G.playing_cards) do
+            if SMODS.has_enhancement(v, 'm_wild') then
+                return true
+            end
+        end
+        return false
+    end,
+
     calculate = function(self, card, context)
         if context.joker_main and context.cardarea == G.jokers then
             if next(context.poker_hands['Flush']) then
-                local suits = {
-                    ['Hearts'] = 0,
-                    ['Diamonds'] = 0,
-                    ['Spades'] = 0,
-                    ['Clubs'] = 0
-                }
-                for i = 1, #context.scoring_hand do
-                    if not SMODS.has_any_suit(context.scoring_hand[i]) then
-                        if context.scoring_hand[i]:is_suit('Hearts', true) and suits["Hearts"] == 0 then suits["Hearts"] = suits["Hearts"] + 1
-                        elseif context.scoring_hand[i]:is_suit('Diamonds', true) and suits["Diamonds"] == 0  then suits["Diamonds"] = suits["Diamonds"] + 1
-                        elseif context.scoring_hand[i]:is_suit('Spades', true) and suits["Spades"] == 0  then suits["Spades"] = suits["Spades"] + 1
-                        elseif context.scoring_hand[i]:is_suit('Clubs', true) and suits["Clubs"] == 0  then suits["Clubs"] = suits["Clubs"] + 1 end
+                if context.scoring_hand then
+                    local wilds = {}
+                    for i = 1, #context.scoring_hand do
+                        if SMODS.has_enhancement(context.scoring_hand[i], 'm_wild') then
+                            table.insert(wilds, context.scoring_hand[i])
+                        end
                     end
-                end
-                for i = 1, #context.scoring_hand do
-                    if SMODS.has_any_suit(context.scoring_hand[i]) then
-                        if context.scoring_hand[i]:is_suit('Hearts') and suits["Hearts"] == 0 then suits["Hearts"] = suits["Hearts"] + 1
-                        elseif context.scoring_hand[i]:is_suit('Diamonds') and suits["Diamonds"] == 0  then suits["Diamonds"] = suits["Diamonds"] + 1
-                        elseif context.scoring_hand[i]:is_suit('Spades') and suits["Spades"] == 0  then suits["Spades"] = suits["Spades"] + 1
-                        elseif context.scoring_hand[i]:is_suit('Clubs') and suits["Clubs"] == 0  then suits["Clubs"] = suits["Clubs"] + 1 end
+                    if #wilds > 0 then 
+                        return {
+                            xmult = card.ability.extra.xmult
+                        }
                     end
-                end
-                local suit_counter = 0
-                if suits["Hearts"] > 0 then
-                    suit_counter = suit_counter + 1
-                end
-                if suits["Diamonds"] > 0 then
-                    suit_counter = suit_counter + 1
-                end
-                if suits["Spades"] > 0 then
-                    suit_counter = suit_counter + 1
-                end
-                if suits["Clubs"] > 0 then
-                    suit_counter = suit_counter + 1
-                end
-                if suit_counter > 1 then
-                    return {
-                        xmult = card.ability.extra.xmult
-                    }
                 end
             end
         end
