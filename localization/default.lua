@@ -842,15 +842,6 @@ return {
                     "has random levels",
                 },
             },
-            j_mksn_underdog = {
-                name = "Underdog",
-                text = {
-                    "Create a {C:spectral}Spectral{} card",
-                    "when probability check",
-                    "fails {C:attention}3{} consecutive times",
-                    "{C:inactive}(Currently {C:attention}#1#{C:inactive} fail)",
-                },
-            },
             j_mksn_we_rich = {
                 name = "We Are Rich!",
                 text = {
