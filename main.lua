@@ -4311,13 +4311,13 @@ SMODS.Joker {
 
 SMODS.Joker {
     key = "do_it_again",
-    rarity = 1,
+    rarity = 2,
     pos = {
         x = 4,
         y = 6
     },
     atlas = "Jokers",
-    cost = 5,
+    cost = 7,
     unlocked = true,
     blueprint_compat = true,
     eternal_compat = true,
@@ -4351,7 +4351,7 @@ SMODS.Joker {
                     mults = true
                 end
             end
-            if bonuses and mults then
+            if bonuses or mults then
                 card.ability.extra.repetitions = 1
             end
         end
