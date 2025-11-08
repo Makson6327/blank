@@ -1,0 +1,41 @@
+[manifest]
+version = "1.0.0"
+dump_lua = true
+priority = 1
+
+    # Changing size of booster packs
+[[patches]]
+[patches.pattern]
+target = "functions/state_events.lua"
+pattern = '''
+reset_idol_card()
+reset_mail_rank()
+reset_ancient_card()
+reset_castle_card()    
+'''
+position = "after"
+payload = '''
+
+if G.GAME.is_guaranteed then
+    G.GAME.is_guaranteed = false
+    if next(SMODS.find_card('j_mksn_divided_zero')) then
+        for k, v in pairs(G.GAME.probabilities) do 
+            G.GAME.probabilities[k] = 0
+        end
+    else
+        for k, v in pairs(G.GAME.probabilities) do 
+            G.GAME.probabilities[k] = 1
+        end
+        for k, v in ipairs(G.jokers.cards) do
+            if v.ability.name == 'Oops! All 6s'  then
+                for k, v in pairs(G.GAME.probabilities) do 
+                    G.GAME.probabilities[k] = v * 2
+                end
+            end
+        end
+    end
+end
+
+'''
+match_indent = true
+times = 1

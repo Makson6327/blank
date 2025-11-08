@@ -490,6 +490,14 @@ return {
                     "cards held in hand",
                 },
             },
+            j_mksn_genie = {
+                name = "Genie",
+                text = {
+                    "Sell this card to",
+                    "make all {C:attention}listed {C:green,E:1,S:1.1}probabilities",
+                    "guaranteed this round"
+                },
+            },
             j_mksn_gold_armor = {
                 name = "Golden Sword",
                 text = {
@@ -896,7 +904,8 @@ return {
             k_mksn_minus_five_ex = "-5",
             k_mksn_plus_tag = "+1 Tag",
             k_mksn_blu_hand = "+1 Hand",
-            k_mksn_red_discard = "+1 Discard"
+            k_mksn_red_discard = "+1 Discard",
+            k_mksn_non_active = "not active"
         },
     }
 }

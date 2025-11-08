@@ -2725,7 +2725,7 @@ SMODS.Joker {
     soul_pos = nil,
 
     add_to_deck = function(self, card, from_debuff)
-       for k, v in pairs(G.GAME.probabilities) do 
+        for k, v in pairs(G.GAME.probabilities) do 
             G.GAME.probabilities[k] = v * 0
         end
     end,
@@ -4415,6 +4415,47 @@ SMODS.Joker {
 }
 
 SMODS.Joker {
+    key = "genie",
+    rarity = 2,
+    pos = {
+        x = 6,
+        y = 6
+    },
+    atlas = "Jokers",
+    cost = 6,
+    unlocked = true,
+    blueprint_compat = false,
+    eternal_compat = false,
+    perishable_compat = false,
+    soul_pos = nil,
+
+    loc_vars = function(self, info_queue, card)
+        local active = G.GAME.blind and (G.GAME.blind:get_type() == 'Boss' or G.GAME.blind:get_type() == 'Small' or G.GAME.blind:get_type() == 'Big')
+        local main_end = {
+            {n=G.UIT.C, config={align = "bm", minh = 0.4}, nodes={
+                {n=G.UIT.C, config={ref_table = self, align = "m", colour = active and G.C.GREEN or G.C.RED, r = 0.05, padding = 0.06}, nodes={
+                    {n=G.UIT.T, config={text = ' '..localize(active and 'k_active' or 'k_mksn_non_active')..' ',colour = G.C.UI.TEXT_LIGHT, scale = 0.32*0.9}},
+                }}
+            }}
+        }
+        return {
+            main_end = main_end
+        }
+    end,
+
+    calculate = function(self, card, context)
+        if context.selling_self then
+            if G.GAME.blind then
+                G.GAME.is_guaranteed = true
+                for k, v in pairs(G.GAME.probabilities) do 
+                    G.GAME.probabilities[k] = 1112
+                end
+            end
+        end
+    end
+}
+
+SMODS.Joker {
     key = "two_factor",
     rarity = 2,
     pos = {
@@ -4650,6 +4691,8 @@ Game.init_game_object = function(self)
     ret.current_round.mksn_2fsign5 = {
         rank = 2,
     }
+
+    ret.is_guaranteed = false
     return ret
 end
 
