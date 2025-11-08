@@ -4445,7 +4445,7 @@ SMODS.Joker {
 
     calculate = function(self, card, context)
         if context.selling_self then
-            if G.GAME.blind then
+            if G.GAME.blind and (G.GAME.blind:get_type() == 'Boss' or G.GAME.blind:get_type() == 'Small' or G.GAME.blind:get_type() == 'Big') then
                 G.GAME.is_guaranteed = true
                 for k, v in pairs(G.GAME.probabilities) do 
                     G.GAME.probabilities[k] = 1112
