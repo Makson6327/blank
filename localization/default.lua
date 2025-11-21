@@ -587,7 +587,7 @@ return {
             j_mksn_kaleidoscope = {
                 name = "Kaleidoscope",
                 text = {
-                    "Upgrade level of",
+                    "Upgrade level of first",
                     "played {C:attention}poker hand{}",
                     "if it contains a",
                     "{C:diamonds}Diamond{} card, {C:clubs}Club{} card,",

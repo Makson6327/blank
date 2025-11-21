@@ -784,7 +784,7 @@ SMODS.Enhancement {
     no_suit = true,
     always_scores = true,
     replace_base_card = true,
-    config = {extra = {x_mult = 2}},
+    config = {extra = {x_mult = 1.75}},
     loc_vars = function(self, info_queue, card)
         return {
             vars = {
@@ -1039,7 +1039,7 @@ SMODS.Joker {
 
 SMODS.Joker {
     key = "big_smoke",
-    rarity = 1,
+    rarity = 2,
     pos = {
         x = 1,
         y = 0
@@ -1735,7 +1735,7 @@ SMODS.Joker {
     perishable_compat = true,
     soul_pos = nil,
 
-    config = {extra = {mult = 5}},
+    config = {extra = {mult = 6}},
     loc_vars = function(self, info_queue, card)
         return {
             vars = {
@@ -2146,7 +2146,7 @@ SMODS.Joker {
     soul_pos = nil,
 
     calculate = function(self, card, context)
-        if context.before then
+        if context.before and G.GAME.current_round.hands_played == 0 then
             local suits = {
                 ['Hearts'] = 0,
                 ['Diamonds'] = 0,
@@ -2406,7 +2406,7 @@ SMODS.Joker {
 
 SMODS.Joker {
     key = "flushbang",
-    rarity = 1,
+    rarity = 2,
     pos = {
         x = 7,
         y = 2
@@ -3086,7 +3086,7 @@ SMODS.Joker {
     perishable_compat = true,
     soul_pos = nil,
 
-    config = {extra = {xmult = 5}},
+    config = {extra = {xmult = 4}},
     loc_vars = function(self, info_queue, card)
         return {
             vars = {
