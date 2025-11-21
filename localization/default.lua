@@ -655,7 +655,7 @@ return {
                 name = "New Driver",
                 text = {
                     "Prevents Death",
-                    "on Ante {C:attention}2",
+                    "on Ante {C:attention}3",
                     "or lower",
                     "{S:1.1,C:red,E:2}self destructs{}",
                 }
@@ -840,6 +840,17 @@ return {
                 text = {
                     "Played poker hands",
                     "has random levels",
+                },
+            },
+            j_mksn_underdog = {
+                name = "Underdog",
+                text = {
+                    "If played hand contains",
+                    "scoring {C:attention}Lucky{} card",
+                    "and no {C:attention}Lucky{} cards",
+                    "{C:green}succesfully{} triggered this hand",
+                    "create a {C:spectral}Spectral{} card",
+                    "{C:inactive}(Must have room)",
                 },
             },
             j_mksn_we_rich = {

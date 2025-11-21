@@ -3227,6 +3227,87 @@ SMODS.Joker {
 }
 
 SMODS.Joker {
+    key = "underdog",
+    rarity = 3,
+    pos = {
+        x = 3,
+        y = 4
+    },
+    atlas = "Jokers",
+    cost = 7,
+    unlocked = true,
+    blueprint_compat = true,
+    eternal_compat = true,
+    perishable_compat = true,
+    soul_pos = nil,
+
+    config = {extra = {hits = 0}},
+    loc_vars = function(self, info_queue, card)
+        info_queue[#info_queue + 1] = G.P_CENTERS.m_lucky
+        return {
+            vars = {
+                card.ability.extra.hits
+            }
+        }
+    end,
+
+    in_pool = function(self, args)
+        for k, v in pairs(G.playing_cards) do
+            if SMODS.has_enhancement(v, 'm_lucky') then
+                return true
+            end
+        end
+        return false
+    end,
+
+    calculate = function(self, card, context)
+        if context.joker_main and context.cardarea == G.jokers then
+            if context.scoring_hand then
+                local luckys = {}
+                for i = 1, #context.scoring_hand do
+                    if SMODS.has_enhancement(context.scoring_hand[i], 'm_lucky') then
+                        table.insert(luckys, context.scoring_hand[i])
+                    end
+                end
+                if #luckys > 0 and card.ability.extra.hits == 0 then 
+                    if #G.consumeables.cards + G.GAME.consumeable_buffer < G.consumeables.config.card_limit then
+                        G.E_MANAGER:add_event(Event({
+                            func = function()
+                                local card_type = 'Spectral'
+                                G.GAME.consumeable_buffer = G.GAME.consumeable_buffer + 1
+                                G.E_MANAGER:add_event(Event({
+                                trigger = 'before',
+                                delay = 0.0,
+                                func = (function()
+                                    local card = create_card(card_type,G.consumeables, nil, nil, nil, nil, nil, 'sup')
+                                    card:add_to_deck()
+                                    G.consumeables:emplace(card)
+                                    G.GAME.consumeable_buffer = 0
+                                    return true
+                                end)}))
+                                return {
+                                    message = localize('k_plus_spectral'),
+                                    colour = G.C.SECONDARY_SET.Spectral,
+                                    card = self
+                                }
+                            end  
+                        }))
+                    end
+                end
+            end
+        end
+
+        if context.individual and context.other_card.lucky_trigger and not context.blueprint then
+            card.ability.extra.hits = card.ability.extra.hits + 1
+        end
+
+        if context.after and not context.blueprint then
+            card.ability.extra.hits = 0
+        end
+    end
+}
+
+SMODS.Joker {
     key = "clockwork_jaw",
     rarity = 2,
     pos = {
@@ -3999,7 +4080,7 @@ SMODS.Joker {
     soul_pos = nil,
     
     calculate = function(self, card, context)
-        if context.end_of_round and not context.repetition and not context.individual and not context.blueprint and G.GAME.round_resets.ante < 3 then
+        if context.end_of_round and not context.repetition and not context.individual and not context.blueprint and G.GAME.round_resets.ante < 4 then
             if context.game_over then
                 G.E_MANAGER:add_event(Event({
                     func = function()
