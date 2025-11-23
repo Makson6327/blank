@@ -37,11 +37,11 @@ return {
             b_mksn_kuiper = {
                 name = "Kuiper Deck",
                 text = {
+                    "{C:planet}Planet{} items no longer",
+                    "appear in the {C:attention}shop",
                     "After defeating each",
                     "{C:attention}Boss Blind{}, gain a",
                     "{C:spectral,T:c_black_hole}Black Hole{} card",
-                    "{C:planet}Planet{} cards and vouchers",
-                    "no longer appear in the {C:attention}shop",
                     "{C:inactive}(Must have room)",
                 },
             },

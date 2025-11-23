@@ -240,7 +240,7 @@ SMODS.Back {
         y = 0
     },
     apply = function (self)
-        local banned = {"v_planet_merchant","v_planet_tycoon"}
+        local banned = {"v_planet_merchant", "v_planet_tycoon", 'p_celestial_normal_1', 'p_celestial_normal_2', 'p_celestial_normal_3', 'p_celestial_normal_4', 'p_celestial_jumbo_1','p_celestial_mega_1','p_celestial_jumbo_2','p_celestial_mega_2'}
 		for k,v in ipairs(banned) do
 			G.GAME.banned_keys[v] = true
 		end
