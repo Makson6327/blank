@@ -250,10 +250,10 @@ SMODS.Back {
 		end}))
 	end,
     calculate = function(self, card, context)
-		if context.end_of_round and G.GAME.blind.boss and not context.repetition and not context.individual  then
+		if context.end_of_round and G.GAME.blind.boss and not context.repetition and not context.individual and #G.consumeables.cards + G.GAME.consumeable_buffer < G.consumeables.config.card_limit then
 			G.E_MANAGER:add_event(Event({
 				func = function()
-					SMODS.add_card { key = 'c_black_hole', edition = "e_negative" }
+					SMODS.add_card { key = 'c_black_hole' }
 					return true
 				end
 			}))
@@ -4616,6 +4616,76 @@ SMODS.Joker {
                     xmult = card.ability.extra.xmult + card.ability.extra.plus_xmult * math.max(0,(G.GAME.dollars + (G.GAME.dollar_buffer or 0)))
                 }
             end
+        end
+    end
+}
+
+SMODS.Joker {
+    key = "nichola",
+    rarity = 4,
+    pos = {
+        x = 1,
+        y = 8
+    },
+    soul_pos = {
+        x = 1,
+        y = 9
+    },
+    atlas = "Jokers",
+    cost = 20,
+    unlocked = true,
+    blueprint_compat = false,
+
+    config = {extra = {ace = false, king = false, queen = false, jack = false, ten = false}},
+    calculate = function(self, card, context)
+        if context.setting_blind and not self.getting_sliced and not G.GAME.blind.boss and not context.blueprint then
+            local rank = '2'
+            local suit = 'H'
+            for k, v in ipairs(G.playing_cards) do
+                if v:get_id() == 14 and v:is_suit("Hearts") then
+                    card.ability.extra.ace = true
+                end
+                if v:get_id() == 13 and v:is_suit("Hearts") then
+                    card.ability.extra.king = true
+                end
+                if v:get_id() == 12 and v:is_suit("Hearts") then
+                    card.ability.extra.queen = true
+                end
+                if v:get_id() == 11 and v:is_suit("Hearts") then
+                    card.ability.extra.jack = true
+                end
+                if v:get_id() == 10 and v:is_suit("Hearts") then
+                    card.ability.extra.ten = true
+                end
+            end
+            if not card.ability.extra.ace then
+                rank = 'A'
+                create_playing_card({front = G.P_CARDS[suit..'_'..rank], center = G.P_CENTERS.c_base}, G.deck, nil, nil, {G.C.SECONDARY_SET.Default})
+            end
+            if not card.ability.extra.king then
+                rank = 'K'
+                create_playing_card({front = G.P_CARDS[suit..'_'..rank], center = G.P_CENTERS.c_base}, G.deck, nil, nil, {G.C.SECONDARY_SET.Default})
+            end
+            if not card.ability.extra.queen then
+                rank = 'Q'
+                create_playing_card({front = G.P_CARDS[suit..'_'..rank], center = G.P_CENTERS.c_base}, G.deck, nil, nil, {G.C.SECONDARY_SET.Default})
+            end
+            if not card.ability.extra.jack then
+                rank = 'J'
+                create_playing_card({front = G.P_CARDS[suit..'_'..rank], center = G.P_CENTERS.c_base}, G.deck, nil, nil, {G.C.SECONDARY_SET.Default})
+            end
+            if not card.ability.extra.ten then
+                rank = 'T'
+                create_playing_card({front = G.P_CARDS[suit..'_'..rank], center = G.P_CENTERS.c_base}, G.deck, nil, nil, {G.C.SECONDARY_SET.Default})
+            end
+        end
+
+        if context.end_of_round and not context.repetition and not context.individual and not context.blueprint then
+            card.ability.extra.ace = false
+            card.ability.extra.king = false
+            card.ability.extra.queen = false
+            card.ability.extra.jack = false
+            card.ability.extra.ten = false
         end
     end
 }

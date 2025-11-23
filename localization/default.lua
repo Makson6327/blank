@@ -42,6 +42,7 @@ return {
                     "{C:spectral,T:c_black_hole}Black Hole{} card",
                     "{C:planet}Planet{} cards and vouchers",
                     "no longer appear in the {C:attention}shop",
+                    "{C:inactive}(Must have room)",
                 },
             },
             b_mksn_negativedeck = {
@@ -659,6 +660,15 @@ return {
                     "or lower",
                     "{S:1.1,C:red,E:2}self destructs{}",
                 }
+            },
+            j_mksn_nichola = {
+                name = "Nichola",
+                text = {
+                    "Draw a {C:attention}Royal Flush",
+                    "of {C:hearts}Hearts{} in your first",
+                    "hand on non-Boss blinds",
+                    "{C:inactive}(Creates missing cards on draw)",
+                },
             },
             j_mksn_divided_zero = {
                 name = "Oops! Divided by 0",

@@ -1,0 +1,89 @@
+[manifest]
+version = "1.0.0"
+dump_lua = true
+priority = 1
+
+    # Drawing royal flush
+[[patches]]
+[patches.pattern]
+target = "functions/state_events.lua"
+pattern = '''
+if limit - 1 + mod < 0 then
+else    
+    limit = limit - 1 + mod
+    table.insert(cards_to_draw, card)
+    if limit <= 0 then break end
+end
+'''
+position = "at"
+payload = '''
+if next(SMODS.find_card('j_mksn_nichola')) and G.GAME.current_round.hands_played == 0 and G.GAME.current_round.discards_used == 0 and not G.GAME.blind.boss and #cards_to_draw < 5 then
+    local has_ace = false
+    local has_king = false
+    local has_queen = false
+    local has_jack = false
+    local has_ten = false
+
+    if limit - 1 + mod < 0 then
+    else
+        for k, v in ipairs(G.deck.cards) do
+            if v:get_id() == 14 and v:is_suit("Hearts") and not has_ace then
+                limit = limit - 1 + mod
+                table.insert(cards_to_draw, v)
+                has_ace = true
+            end
+            if v:get_id() == 13 and v:is_suit("Hearts") and not has_king then
+                limit = limit - 1 + mod
+                table.insert(cards_to_draw, v)
+                has_king = true
+            end
+            if v:get_id() == 12 and v:is_suit("Hearts") and not has_queen then
+                limit = limit - 1 + mod
+                table.insert(cards_to_draw, v)
+                has_queen = true
+            end
+            if v:get_id() == 11 and v:is_suit("Hearts") and not has_jack then
+                limit = limit - 1 + mod
+                table.insert(cards_to_draw, v)
+                has_jack = true
+            end
+            if v:get_id() == 10 and v:is_suit("Hearts") and not has_ten then
+                limit = limit - 1 + mod
+                table.insert(cards_to_draw, v)
+                has_ten = true
+            end
+            if limit <= 0 then break end
+        end
+    end
+else
+    if limit - 1 + mod < 0 then
+    else    
+        limit = limit - 1 + mod
+        table.insert(cards_to_draw, card)
+        if limit <= 0 then break end
+    end
+end
+'''
+match_indent = true
+times = 1
+
+
+[[patches]]
+[patches.pattern]
+target = "functions/state_events.lua"
+pattern = '''
+if G.GAME.blind.name == 'The Serpent' and
+    not G.GAME.blind.disabled and
+    (G.GAME.current_round.hands_played > 0 or
+    G.GAME.current_round.discards_used > 0) then
+        hand_space = math.min(#G.deck.cards, 3)
+end
+'''
+position = "after"
+payload = '''
+if next(SMODS.find_card('j_mksn_nichola')) and G.GAME.current_round.hands_played == 0 and G.GAME.current_round.discards_used == 0 and not G.GAME.blind.boss then
+    hand_space = math.min(#G.deck.cards, 5)
+end
+'''
+match_indent = true
+times = 1
