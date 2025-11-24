@@ -2014,7 +2014,7 @@ SMODS.Joker {
     perishable_compat = true,
     soul_pos = nil,
 
-    config = {extra = {start_dollars = 0, plus_dollars = 2}},
+    config = {extra = {start_dollars = 0, plus_dollars = 1}},
     loc_vars = function(self, info_queue, card)
         return {
             vars = {
@@ -2031,15 +2031,15 @@ SMODS.Joker {
                 colour = G.C.MONEY
             }
         end
-
-        if context.end_of_round and not context.repetition and not context.individual then
-            if card.ability.extra.start_dollars ~= 0 then
-                return {
-                    dollars = card.ability.extra.start_dollars
-                }
-            end
+    end,
+    calc_dollar_bonus = function(self, card)
+        if card.ability.extra.start_dollars > 0 then
+            return card.ability.extra.start_dollars
+        else
+            return nil
         end
     end,
+
     update = function(self, card, front)
         card.ability.extra.start_dollars = card.ability.extra.plus_dollars * G.GAME.skips
     end
