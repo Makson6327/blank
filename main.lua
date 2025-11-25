@@ -3131,10 +3131,14 @@ SMODS.Joker {
 
     config = {extra = {plus_chips = 40, start_dollars = 25, sub_dollars = 5}},
     loc_vars = function(self, info_queue, card)
+        local chip_bonus = 0
+        if G.GAME.dollars < card.ability.extra.start_dollars then
+            chip_bonus = card.ability.extra.plus_chips * math.floor((card.ability.extra.start_dollars - G.GAME.dollars + (G.GAME.dollar_buffer or 0))/card.ability.extra.sub_dollars)
+        end
         return {
             vars = {
                 card.ability.extra.plus_chips,
-                card.ability.extra.plus_chips * math.floor((card.ability.extra.start_dollars - G.GAME.dollars + (G.GAME.dollar_buffer or 0))/card.ability.extra.sub_dollars),
+                chip_bonus,
                 card.ability.extra.start_dollars,
                 card.ability.extra.sub_dollars,
             }
@@ -3718,7 +3722,7 @@ SMODS.Joker {
                     card.ability.extra.chips = card.ability.extra.chips + 25
                 end
             elseif SMODS.has_enhancement(context.other_card, 'm_mksn_scratched') then
-                card.ability.extra.xmult = card.ability.extra.xmult + 2
+                card.ability.extra.xmult = card.ability.extra.xmult + 1.75
             end
 
             if context.other_card:get_seal() == 'Gold' then

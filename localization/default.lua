@@ -369,6 +369,7 @@ return {
                     "{C:chips}+#1#{} chips for",
                     "each {C:money}$#4#{} you have",
                     "under {C:money}$#3#{}",
+                    "{C:inactive}(Currently {C:chips}+#2#{C:inactive} Chips)",
                 }
             },
             j_mksn_brownies = {
@@ -432,9 +433,9 @@ return {
             j_mksn_magazine = {
                 name = "Extra Magazine",
                 text = {
-                    "Score all cards",
-                    "held in hand",
-                    "{C:inactive}(Editions don't score)",
+                    "Score all cards' held",
+                    "in hand {C:chips}chip bonus{}, ",
+                    "{C:attention}seals{} and {C:attention}enhancements"
                 },
             },
             j_mksn_weight = {
