@@ -422,6 +422,18 @@ return {
                     "{C:inactive}(Currently {X:mult,C:white} X#1# {C:inactive} Mult)",
                 },
             },
+            j_mksn_degreaser = {
+                name = "Degreaser",
+                text = {
+                    "Removes {C:dark_edition}Editions{} from",
+                    "cards held in hand",
+                    "at the end of round",
+                    "and gains {X:mult,C:white} X#2# {} Mult per",
+                    "Edition removed",
+                    "{C:inactive}(Currently {X:mult,C:white} X#1# {C:inactive} Mult)",
+                    "{C:inactive}(Can't remove Negative from card)",
+                },
+            },
             j_mksn_do_it_again = {
                 name = "Do It Again!",
                 text = {
@@ -454,18 +466,6 @@ return {
                     "after defeating Blind",
                     "in one hand",
                     "{C:inactive}(Currently {X:mult,C:white} X#1# {C:inactive} Mult)",
-                },
-            },
-            j_mksn_flamethrower = {
-                name = "Flamethrower",
-                text = {
-                    "Removes {C:dark_edition}Editions{} from",
-                    "cards held in hand",
-                    "at the end of round",
-                    "and gains {X:mult,C:white} X#2# {} Mult per",
-                    "Edition removed",
-                    "{C:inactive}(Currently {X:mult,C:white} X#1# {C:inactive} Mult)",
-                    "{C:inactive}(Can't remove Negative from card)",
                 },
             },
             j_mksn_flare = {

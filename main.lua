@@ -3456,7 +3456,7 @@ SMODS.Joker {
 
 SMODS.Joker {
     key = "attorney",
-    rarity = 1,
+    rarity = 2,
     pos = {
         x = 7,
         y = 4
@@ -3918,13 +3918,13 @@ SMODS.Joker {
 
 SMODS.Joker {
     key = "artist",
-    rarity = 2,
+    rarity = 1,
     pos = {
         x = 5,
         y = 5
     },
     atlas = "Jokers",
-    cost = 6,
+    cost = 4,
     unlocked = true,
     blueprint_compat = false,
     eternal_compat = true,
@@ -4024,7 +4024,7 @@ SMODS.Joker {
 }
 
 SMODS.Joker {
-    key = "flamethrower",
+    key = "degreaser",
     rarity = 3,
     pos = {
         x = 8,
