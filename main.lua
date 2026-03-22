@@ -4822,6 +4822,20 @@ SMODS.Joker {
     eternal_compat = true,
     perishable_compat = true,
     soul_pos = nil,
+
+    loc_vars = function(self, info_queue, card)
+        info_queue[#info_queue + 1] = G.P_CENTERS.m_steel
+        return nil
+    end,
+
+    in_pool = function(self, args)
+        for k, v in pairs(G.playing_cards) do
+            if SMODS.has_enhancement(v, 'm_steel') then
+                return true
+            end
+        end
+        return false
+    end,
     
     calculate = function(self, card, context)
         if context.after then
