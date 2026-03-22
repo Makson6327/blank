@@ -1,0 +1,35 @@
+[manifest]
+version = "1.0.0"
+dump_lua = true
+priority = 1
+
+    # Nothingness appearance chances
+[[patches]]
+[patches.pattern]
+target = "functions/common_events.lua"
+pattern = '''
+for _, v in ipairs(modded_souls) do
+    threshold = threshold - v.soul_rate/soul_total_rate * (1-non_soul_rate)
+    if roll > threshold then
+        forced_key = v.key
+        break
+    end
+end
+'''
+position = "after"
+payload = '''
+if _type == 'Spectral' and
+ not (G.GAME.used_jokers['c_mksn_nothing'] and not SMODS.showman('c_mksn_nothing')) then
+    if G.GAME.used_vouchers['v_blank'] then
+        if pseudorandom('soul_'.._type..G.GAME.round_resets.ante) > 0.95 then
+            forced_key = 'c_mksn_nothing'
+        end
+    else
+        if pseudorandom('soul_'.._type..G.GAME.round_resets.ante) > 0.997 then
+            forced_key = 'c_mksn_nothing'
+        end
+    end
+end
+'''
+match_indent = true
+times = 1

@@ -146,6 +146,24 @@ return {
                     "to {C:attention}1{} selected",
                     "card in your hand",
                 },
+            },
+            c_mksn_idea = {
+                name = 'Idea',
+                text = {
+                    "Add a {C:green}Lucky Seal{}",
+                    "to {C:attention}1{} selected",
+                    "card in your hand",
+                },
+            },
+            c_mksn_nothing = {
+                name = 'Nothingness',
+                text = {
+                    "Gain {C:money}$50",
+                    "Increased chance of",
+                    "appearance if {C:inactive}Blank",
+                    "Voucher redeemed",
+                    "{C:inactive}(It's called a Blank Mod at least)"
+                },
             }
         },
         Tarot = {
@@ -201,9 +219,8 @@ return {
             mksn_unstable = {
                 name = "Unstable",
                 text = {
-                    "{C:green}#1# in 5{} chance",
-                    "to be destroyed",
-                    "after playing hand",
+                    "This Joker destroyed",
+                    "if consumable used",
                 }
             },
             mksn_indigo_sticker = {
@@ -227,6 +244,14 @@ return {
                 text = {
                     "This card",
                     "can't be debuffed",
+                },
+            },
+            mksn_lucky_seal = {
+                name = "Lucky Seal",
+                text = {
+                    "{C:green}#1# in 4{} chance",
+                    "when this card scored to",
+                    "gain something",
                 },
             }
         },
@@ -329,6 +354,14 @@ return {
                     "until end of Ante"
                 },
             },
+            j_mksn_anvil = {
+                name = "Anvil",
+                text = {
+                    "Copy random {C:attention}Steel{} card",
+                    "held in hand after",
+                    "hand played"
+                },
+            },
             j_mksn_artwork = {
                 name = "Artwork",
                 text = {
@@ -352,7 +385,18 @@ return {
                 text = {
                     "{C:chips}+#1#{} chips",
                     "This card is destroyed",
-                    "after defeating Boss Blind",
+                    "at the start of Small Blind",
+                }
+            },
+            j_mksn_balancer = {
+                name = "Balancing Joker",
+                text = {
+                    "As Blind starts this Joker gains",
+                    "{C:chips}+#1#{} chips for",
+                    "each Joker to the left",
+                    "{C:mult}+#2#{} Mult for",
+                    "each Joker to the right",
+                    "{C:inactive}(Currently {C:chips}+#3#{C:inactive} Chips and {C:mult}+#4#{C:inactive} Mult)",
                 }
             },
             j_mksn_big_smoke = {
@@ -387,16 +431,9 @@ return {
                     "{C:green}#1# in #2#{} chance this",
                     "card is destroyed",
                     "at end of round",
-                    "Create a {C:spectral}Spectral{} card",
+                    "and creates a random",
+                    "{C:spectral}Spectral{} card",
                     "{C:inactive}(Must have room)",
-                },
-            },
-            j_mksn_cheese = {
-                name = "Cheese",
-                text = {
-                    "Prevents Death for a cost of",
-                    "{C:attention}-1{} hand size",
-                    "{S:1.1,C:red,E:2}self destructs{}",
                 },
             },
             j_mksn_clockwork_jaw = {
@@ -440,6 +477,13 @@ return {
                     "Retrigger all played cards",
                     "if played hand contains",
                     "a {C:attention}Bonus{} card or a {C:attention}Mult{} card",
+                },
+            },
+            j_mksn_double_joker = {
+                name = "Double-Headed Joker",
+                text = {
+                    "{C:red}+#1#{} Mult",
+                    "{X:mult,C:white} X#2# {} Mult",
                 },
             },
             j_mksn_magazine = {
@@ -586,6 +630,14 @@ return {
                     "{C:inactive}(May go negative)",
                 },
             },
+            j_mksn_superman = {
+                name = "Jokerman",
+                text = {
+                    "Prevents Death",
+                    "{C:attention}#1#{} handsize on",
+                    "each Death prevented"
+                },
+            },
             j_mksn_kaleidoscope = {
                 name = "Kaleidoscope",
                 text = {
@@ -665,11 +717,10 @@ return {
             j_mksn_nichola = {
                 name = "Nichola",
                 text = {
-                    "Draw a {C:attention}Royal Flush",
-                    "of {C:hearts}Hearts{} in your first",
-                    "hand on non-Boss blinds",
-                    "{C:inactive}(Creates missing cards on draw)",
-                },
+                    "Add random enhancement {C:attention}it{},",
+                    "{C:dark_edition}Edition{} and {C:attention}Seal{}",
+                    "on all played {c:attention}Queens"
+                }
             },
             j_mksn_divided_zero = {
                 name = "Oops! Divided by 0",
@@ -695,11 +746,14 @@ return {
                     "{C:inactive}(Currently {C:money}$#1#{C:inactive})",
                 },
             },
-            j_mksn_press_your_luck = {
-                name = "Press Your Luck",
+            j_mksn_rainbow = {
+                name = "Rainbow",
                 text = {
-                    "Sell this card to",
-                    "{C:legendary,E:1}test your luck",
+                    "This Joker gains {X:mult,C:white} X#1# {} Mult",
+                    "for each unique {C:attention}enhancement",
+                    "played this round,",
+                    "resets at the end of round",
+                    "{C:inactive}(Currently {X:mult,C:white} X#2# {C:inactive} Mult)",
                 },
             },
             j_mksn_pepper = {
@@ -729,15 +783,16 @@ return {
             j_mksn_cute_seal = {
                 name = "Seal Joker",
                 text = {
-                    "Played cards with",
-                    "{C:attention}Seal{} give {C:chips}+#2#{} chips",
-                    "and {C:mult}+#1#{} Mult when scored",
+                    "This Joker gains {C:chips}+#1#{} Chips",
+                    "for each card with seal",
+                    "in played hand",
+                    "{C:inactive}(Currently {C:chips}+#2#{C:inactive} Chips)",
                 }
             },
             j_mksn_skyscraper = {
                 name = "Skyscraper",
                 text = {
-                    "{C:chips}+#2#{} Chips when",
+                    "This Joker gains {C:chips}+#2#{} Chips when",
                     "played hand is a {C:attention}High Card{}",
                     "{C:inactive}(Currently {C:chips}+#1#{C:inactive} Chips)",
                 },
@@ -849,8 +904,8 @@ return {
             j_mksn_ufo = {
                 name = "UFO",
                 text = {
-                    "Played poker hands",
-                    "has random levels",
+                    "Upgrade or downgrade level",
+                    "of first played {C:attention}poker hand{}",
                 },
             },
             j_mksn_underdog = {
@@ -887,13 +942,23 @@ return {
                     "set money to {C:money}$20",
                 }
             },
+            j_mksn_y2k = {
+                name = "Y2K",
+                text = {
+                    "{C:chips}+#1#{} chips",
+                    "This Joker destroyed if",
+                    "earned chips total reaches {C:attention}2000",
+                    "{C:inactive}(Currently {C:attention}#2#{C:inactive} chips earned)",
+                }
+            },
         }
     },
     misc = {
         labels = {
             mksn_large = "Large",
             mksn_unstable = "Unstable",
-            mksn_white_seal = "White Seal"
+            mksn_white_seal = "White Seal",
+            mksn_lucky_seal = "Lucky Seal"
         },
         dictionary = {
             mksn_osho_zen_tarot = 'Osho Zen Tarot',
@@ -901,21 +966,13 @@ return {
 
             k_mksn_unstable_ex = "BOOM!",
 
-            k_mksn_zero_money_ex = "You Lose!",
-            k_mksn_kill_destroy_ex = "Go Home!",
-            k_mksn_consume_ex = "Your Pockets!",
-            k_mksn_no_handy_ex = "Finger Cut!",
-            k_mksn_launch_ex = "Boosting!",
-            k_mksn_plus_money_ex = "Reward!",
-            k_mksn_gift_tag_ex = "Prize!",
-            k_mksn_gift_card_ex = "Huge Prize!!!",
-            k_mksn_gift_edition_ex = "Shiny!",
-            k_mksn_creature_guy_ex = "Crowd!",
-            k_mksn_landing_ex = "Slowing!",
-
             k_mksn_soldier_dead_ex = "F",
             k_mksn_minus_five_ex = "-5",
             k_mksn_plus_tag = "+1 Tag",
+            k_mksn_plus_dollah = "$20",
+            k_mksn_plus_jokah = "+1 Joker",
+            k_mksn_plus_cons = "+1 Consumable",
+            k_mksn_plus_edit = "+1 Edition",
             k_mksn_blu_hand = "+1 Hand",
             k_mksn_red_discard = "+1 Discard",
             k_mksn_non_active = "not active"
