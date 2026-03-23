@@ -1476,7 +1476,7 @@ SMODS.Joker {
     perishable_compat = false,
     soul_pos = nil,
 
-    config = {extra = {chips = 140}},
+    config = {extra = {chips = 80}},
     loc_vars = function(self, info_queue, card)
         return {
             vars = {
