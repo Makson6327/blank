@@ -1476,7 +1476,7 @@ SMODS.Joker {
     perishable_compat = false,
     soul_pos = nil,
 
-    config = {extra = {chips = 80}},
+    config = {extra = {chips = 140, ante_beat = false}},
     loc_vars = function(self, info_queue, card)
         return {
             vars = {
@@ -1492,38 +1492,40 @@ SMODS.Joker {
             }
         end
 
-        if context.setting_blind and not self.getting_sliced and not context.repetition and not context.individual and not context.blueprint then
-            if G.GAME.blind and G.GAME.blind:get_type() == 'Small' then
-			    G.E_MANAGER:add_event(Event({
-                    trigger = 'after',
-                    delay = 0.2,
-                    func = function()
-                        play_sound('tarot2')
-                        card.T.r = -0.2
-                        card:juice_up(0.3, 0.4)
-                        card.states.drag.is = true
-                        card.children.center.pinch.x = true
-                        G.E_MANAGER:add_event(Event({
-                            trigger = 'after',
-                            delay = 0.3,
-                            blockable = false,
-                            func = function()
-                                G.jokers:remove_card(card)
-                                card:remove()
-                                card = nil
-                                return true;
-                            end
-                        }))
-                        return true
-                    end
-                }))
-                return {
-                    card = card,
-                    message = localize('k_eaten_ex'),
-                    colour = G.C.FILTER
-                }
-            end
-		end
+        if context.end_of_round and G.GAME.blind.boss and not context.repetition and not context.individual and not context.blueprint then
+            card.ability.extra.ante_beat = true
+        end
+
+        if context.ending_shop and card.ability.extra.ante_beat then
+			G.E_MANAGER:add_event(Event({
+                trigger = 'after',
+                delay = 0.2,
+                func = function()
+                    play_sound('tarot2')
+                    card.T.r = -0.2
+                    card:juice_up(0.3, 0.4)
+                    card.states.drag.is = true
+                    card.children.center.pinch.x = true
+                    G.E_MANAGER:add_event(Event({
+                        trigger = 'after',
+                        delay = 0.3,
+                        blockable = false,
+                        func = function()
+                            G.jokers:remove_card(card)
+                            card:remove()
+                            card = nil
+                            return true;
+                        end
+                    }))
+                    return true
+                end
+            }))
+            return {
+                card = card,
+                message = localize('k_eaten_ex'),
+                colour = G.C.FILTER
+            }
+        end
     end
 }
 

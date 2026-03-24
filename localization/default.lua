@@ -385,7 +385,8 @@ return {
                 text = {
                     "{C:chips}+#1#{} chips",
                     "This card is destroyed",
-                    "at the start of Small Blind",
+                    "at the end of first",
+                    "shop of Ante"
                 }
             },
             j_mksn_balancer = {
