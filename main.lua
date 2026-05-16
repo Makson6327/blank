@@ -4909,17 +4909,17 @@ SMODS.Joker {
         if context.end_of_round and not context.repetition and not context.individual and not context.blueprint then
             card.ability.extra.xmult = 1
 
-            card.ability.extra.bonus = true
-            card.ability.extra.mult = true
-            card.ability.extra.wild = true
-            card.ability.extra.glass = true
-            card.ability.extra.steel = true
-            card.ability.extra.gold = true
-            card.ability.extra.lucky = true
-            card.ability.extra.stone = true
-            card.ability.extra.sterling = true
-            card.ability.extra.scratched = true
-            card.ability.extra.stained = true
+            card.ability.extra.bonus = false
+            card.ability.extra.mult = false
+            card.ability.extra.wild = false
+            card.ability.extra.glass = false
+            card.ability.extra.steel = false
+            card.ability.extra.gold = false
+            card.ability.extra.lucky = false
+            card.ability.extra.stone = false
+            card.ability.extra.sterling = false
+            card.ability.extra.scratched = false
+            card.ability.extra.stained = false
             return {
                 message = localize('k_reset'),
                 colour = G.C.RED
