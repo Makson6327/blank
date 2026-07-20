@@ -9,14 +9,6 @@ return {
                     "or {C:attention}Scratched{} cards when scored",
                 },
             },
-            b_mksn_grimoire = {
-                name = "Grimoire Deck",
-                text = {
-                    "Start run with",
-                    "{C:attention}1{} random {C:tarot}Tarot{} card and",
-                    "{C:attention}1{} random {C:planet}Planet{} card",
-                },
-            },
             b_mksn_sniper = {
                 name = "Sniper Deck",
                 text = {
@@ -532,7 +524,7 @@ return {
             j_mksn_gardener = {
                 name = "Gardener",
                 text = {
-                    "{C:red}+#1#{} Mult if",
+                    "{C:blue}+#1#{} chips if",
                     "{C:attention}five{} or more",
                     "cards held in hand",
                 },
@@ -617,7 +609,7 @@ return {
                 name = "Joker Artist",
                 text = {
                     "{C:attention}Stained{} cards always",
-                    "gives {X:mult,C:white} X1.2 {} Mult",
+                    "gives {X:mult,C:white} X1.25 {} Mult",
                 },
             },
             j_mksn_joker_doom = {
@@ -841,7 +833,7 @@ return {
                 name = "Suit",
                 text = {
                     "{X:mult,C:white} X#1# {} Mult",
-                    "on Blinds with effects",
+                    "on Boss Blinds",
                 },
             },
             j_mksn_suprematist = {

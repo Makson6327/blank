@@ -151,59 +151,6 @@ SMODS.Back {
 }
 
 SMODS.Back {
-	key = "grimoire",
-    atlas = "Backs",
-    pos = {
-        x = 6,
-        y = 0
-    },
-    apply = function (self)
-        G.E_MANAGER:add_event(Event({
-            func = function()
-                local card_type = 'Tarot'
-                G.GAME.consumeable_buffer = G.GAME.consumeable_buffer + 1
-                G.E_MANAGER:add_event(Event({
-                trigger = 'before',
-                delay = 0.0,
-                func = (function()
-                    local card = create_card(card_type,G.consumeables, nil, nil, nil, nil, nil, 'sup')
-                    card:add_to_deck()
-                    G.consumeables:emplace(card)
-                    G.GAME.consumeable_buffer = 0
-                    return true
-                end)}))
-                return {
-                    message = localize('k_plus_tarot'),
-                    colour = G.C.SECONDARY_SET.Tarot,
-                    card = self
-                }
-            end  
-        }))
-        G.E_MANAGER:add_event(Event({
-            func = function()
-                local card_type = 'Planet'
-                G.GAME.consumeable_buffer = G.GAME.consumeable_buffer + 1
-                G.E_MANAGER:add_event(Event({
-                trigger = 'before',
-                delay = 0.0,
-                func = (function()
-                    local card = create_card(card_type,G.consumeables, nil, nil, nil, nil, nil, 'sup')
-                    card:add_to_deck()
-                    G.consumeables:emplace(card)
-                    G.GAME.consumeable_buffer = 0
-                    return true
-                end)}))
-                return {
-                    message = localize('k_plus_planet'),
-                    colour = G.C.SECONDARY_SET.Planet,
-                    card = self
-                }
-            end  
-        }))
-    end
-}
-
-SMODS.Back {
 	key = "sniper",
     atlas = "Backs",
     pos = {
@@ -773,7 +720,7 @@ SMODS.Consumable{
             trigger = 'after',
             delay = 0.1,
             func = function()
-                conv_card:set_seal(SMODS.poll_seal({ guaranteed = true, type_key = 'creative' }))
+                conv_card:set_seal(SMODS.poll_seal({ guaranteed = true, type_key = 'not_so_creative' }))
                 return true
             end
         }))
@@ -823,7 +770,7 @@ SMODS.Enhancement {
         x = 3,
         y = 0
     },
-    config = {extra = {xmult = 1.2, mult = 3, chips = 25}},
+    config = {extra = {xmult = 1.25, mult = 3, chips = 25}},
     loc_vars = function(self, info_queue, card)
         return {
             vars = {
@@ -3774,11 +3721,11 @@ SMODS.Joker {
     perishable_compat = true,
     soul_pos = nil,
 
-    config = {extra = {mult = 20}},
+    config = {extra = {chips = 120}},
     loc_vars = function(self, info_queue, card)
         return {
             vars = {
-                card.ability.extra.mult
+                card.ability.extra.chips
             }
         }
     end,
@@ -3787,7 +3734,7 @@ SMODS.Joker {
         if context.joker_main and context.cardarea == G.jokers then
             if #G.hand.cards >= 5 then
                 return {
-                    mult = card.ability.extra.mult
+                    chips = card.ability.extra.chips
                 }
             end
         end
@@ -4015,7 +3962,7 @@ SMODS.Joker {
     
     calculate = function(self, card, context)
         if context.joker_main and context.cardarea == G.jokers then
-            if G.GAME.blind.boss and not G.GAME.blind.disabled then
+            if G.GAME.blind.boss then
                 return {
                     xmult = card.ability.extra.xmult
                 }
@@ -4522,12 +4469,12 @@ SMODS.Joker {
                 end
             end
             if one and two and three and four and five then
-                card.ability.extra.xmult = 4
+                card.ability.extra.xmult = 5
             end
         end
 
         if context.joker_main and context.cardarea == G.jokers then
-            if card.ability.extra.xmult == 4 then
+            if card.ability.extra.xmult == 5 then
                 return {
                     xmult = card.ability.extra.xmult
                 }
@@ -4687,7 +4634,7 @@ SMODS.Joker {
     perishable_compat = true,
     soul_pos = nil,
 
-    config = {extra = {plus_chips = 30, plus_mult = 3, chips = 0, mult = 0, left = 0, right = 0, jokah = 0}},
+    config = {extra = {plus_chips = 20, plus_mult = 3, chips = 0, mult = 0, left = 0, right = 0, jokah = 0}},
     loc_vars = function(self, info_queue, card)
         return {
             vars = {
@@ -4888,7 +4835,7 @@ SMODS.Joker {
     perishable_compat = true,
     soul_pos = nil,
     
-    config = {extra = {plus_xmult = 0.2, xmult = 1,
+    config = {extra = {plus_xmult = 0.25, xmult = 1,
         bonus = false, mult = false, wild = false, glass = false, steel = false, gold = false, lucky = false, stone = false, sterling = false, scratched = false, stained = false}},
     loc_vars = function(self, info_queue, card)
         return {
