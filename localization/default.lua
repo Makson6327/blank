@@ -889,7 +889,7 @@ return {
             j_mksn_two_factor = {
                 name = "Two-Factor Sign",
                 text = {
-                    "{X:mult,C:white} X4 {} Mult if",
+                    "{X:mult,C:white} X5 {} Mult if",
                     "played hand contains",
                     "scoring {C:attention}#1#{}, {C:attention}#2#{}, {C:attention}#3#{}, {C:attention}#4#{} and {C:attention}#5#",
                 },
