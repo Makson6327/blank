@@ -8,7 +8,7 @@ priority = 1
 [patches.pattern]
 target = "functions/common_events.lua"
 pattern = '''
-local card = Card(area.T.x + area.T.w/2, area.T.y, G.CARD_W, G.CARD_H, SMODS.set_create_card_front or front, center,
+local card = Card(area.T.x + area.T.w/2, area.T.y, G.CARD_W*SMODS.create_card_scale.w, G.CARD_H*SMODS.create_card_scale.h, front, center,
     {bypass_discovery_center = SMODS.bypass_create_card_discovery_center or area==G.shop_jokers or area == G.pack_cards or area == G.shop_vouchers or (G.shop_demo and area==G.shop_demo) or area==G.jokers or area==G.consumeables,
      bypass_discovery_ui = SMODS.bypass_create_card_discovery_center or area==G.shop_jokers or area == G.pack_cards or area==G.shop_vouchers or (G.shop_demo and area==G.shop_demo),
      discover = SMODS.bypass_create_card_discover or area==G.jokers or area==G.consumeables, 

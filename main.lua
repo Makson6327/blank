@@ -4567,8 +4567,22 @@ SMODS.Joker {
         if context.joker_main and context.cardarea == G.jokers then
             return {
                 mult = card.ability.extra.mult,
-                xmult = card.ability.extra.xmult
             }
+        end
+
+        if context.other_joker then
+            if context.other_joker == G.jokers.cards[1] then
+			    G.E_MANAGER:add_event(Event({
+                    func = function()
+                        context.other_joker:juice_up(0.5, 0.5)
+                        return true
+                    end
+                })) 
+                return {
+                    message = localize{type = 'variable', key = 'a_xmult', vars = {card.ability.extra.xmult}},
+                    Xmult_mod = card.ability.extra.xmult
+                }
+            end
         end
     end
 }

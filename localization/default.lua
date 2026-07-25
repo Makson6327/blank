@@ -260,7 +260,7 @@ return {
                 name = "Lime Stake",
                 text = {
                     "Shop can have {C:attention}Unstable{} Jokers",
-                    "{C:inactive,s:0.8}(1 in 5 chance to be destroyed after playing hand)",
+                    "{C:inactive,s:0.8}(This Joker destroyed if consumable used)",
                     "{s:0.8}Applies all previous Stakes",
                 },
             },
@@ -476,7 +476,7 @@ return {
                 name = "Double-Headed Joker",
                 text = {
                     "{C:red}+#1#{} Mult",
-                    "{X:mult,C:white} X#2# {} Mult",
+                    "Leftmost Joker give {X:mult,C:white} X#2# {} Mult",
                 },
             },
             j_mksn_magazine = {
