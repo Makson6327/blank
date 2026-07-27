@@ -429,11 +429,29 @@ return {
                     "{C:inactive}(Must have room)",
                 },
             },
+            j_mksn_cigarette_pack = {
+                name = "Cigarette Pack",
+                text = {
+                    "After {C:attention}#1#{} hands,",
+                    "sell this card to",
+                    "create a {C:tarot}Death{} card",
+                    "{C:inactive}(Currently {C:attention}#2#{C:inactive}/#1#)",
+                },
+            },
             j_mksn_clockwork_jaw = {
                 name = "Clockwork Jaw",
                 text = {
                     "Destroy {C:attention}first{} played",
                     "card used in scoring",
+                },
+            },
+            j_mksn_collector = {
+                name = "Collector Joker",
+                text = {
+                    "This Joker gains {X:mult,C:white} X#1# {} Mult",
+                    "when any {C:attention}Booster Pack{} is opened,",
+                    "resets at the end of Ante",
+                    "{C:inactive}(Currently {X:mult,C:white} X#2# {} Mult)",
                 },
             },
             j_mksn_compact_disc = {
@@ -442,6 +460,22 @@ return {
                     "This Joker gains {C:mult}+#2#{} Mult",
                     "for each card {C:attention}sold",
                     "{C:inactive}(Currently {C:mult}+#1#{C:inactive} Mult)",
+                },
+            },
+            j_mksn_consolation = {
+                name = "Consolation Prize",
+                text = {
+                    "This Joker gains",
+                    "{X:mult,C:white} X#1# {} Mult for each",
+                    "scored {C:attention}debuffed{} cards",
+                },
+            },
+            j_mksn_crying = {
+                name = "Crying Joker",
+                text = {
+                    "Every played {C:attention}Wild{} card",
+                    "permanently gains",
+                    "{X:mult,C:white} X#1# {} Mult when scored",
                 },
             },
             j_mksn_dealer = {
@@ -910,6 +944,14 @@ return {
                     "{C:green}succesfully{} triggered this hand",
                     "create a {C:spectral}Spectral{} card",
                     "{C:inactive}(Must have room)",
+                },
+            },
+            j_mksn_valentine = {
+                name = "Valentine Card",
+                text = {
+                    "{C:attention}Wild{} cards have",
+                    "ability of {C:attention}#1#{} seal,",
+                    "resets every round"
                 },
             },
             j_mksn_we_rich = {

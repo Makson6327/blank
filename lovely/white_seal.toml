@@ -18,6 +18,13 @@ if self.seal and self.seal == "mksn_white" then
     end
     return
 end
+
+if G.GAME.current_round.mksn_valentine.color == 'White' and SMODS.has_enhancement(self, 'm_wild') then
+    if self.debuff then
+        self.debuff = false
+    end
+    return
+end
 '''
 match_indent = true
 times = 1

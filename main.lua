@@ -4948,6 +4948,441 @@ SMODS.Joker {
 }
 
 SMODS.Joker {
+    key = "cigarette_pack",
+    rarity = 1,
+    pos = {
+        x = 5,
+        y = 7
+    },
+    atlas = "Jokers",
+    cost = 5,
+    unlocked = true,
+    blueprint_compat = false,
+
+    config = {extra = {max_hands = 3, hands = 0}},
+    loc_vars = function(self, info_queue, card)
+        info_queue[#info_queue + 1] = G.P_CENTERS.c_death
+        return {
+            vars = {
+                card.ability.extra.max_hands,
+                card.ability.extra.hands,
+            }
+        }
+    end,
+
+    calculate = function(self, card, context)
+        if context.before then
+            if card.ability.extra.hands < card.ability.extra.max_hands then
+                card.ability.extra.hands = card.ability.extra.hands + 1
+                if card.ability.extra.hands == card.ability.extra.max_hands then
+                    local eval = function(card) return not card.REMOVED end
+                        juice_card_until(card, eval, true)
+                end
+                return {
+                    message = (card.ability.extra.hands < card.ability.extra.max_hands) and (card.ability.extra.hands..'/'..card.ability.extra.max_hands) or localize('k_active_ex'),
+                    colour = G.C.FILTER
+                }
+            end
+        end
+
+        if context.selling_self then
+            if card.ability.extra.hands >= card.ability.extra.max_hands then
+                local eval = function(card) return (card.ability.loyalty_remaining == 0) and not G.RESET_JIGGLES end
+                                    juice_card_until(card, eval, true)
+                if #G.consumeables.cards + G.GAME.consumeable_buffer < G.consumeables.config.card_limit then
+                    G.E_MANAGER:add_event(Event({
+                        func = function()
+                            G.GAME.consumeable_buffer = G.GAME.consumeable_buffer + 1
+                            G.E_MANAGER:add_event(Event({
+                            trigger = 'before',
+                            delay = 0.0,
+                            func = (function()
+                                SMODS.add_card({ key = 'c_death' })
+                                G.GAME.consumeable_buffer = 0
+                                return true
+                            end)}))
+                            return {
+                                message = localize('k_plus_tarot'),
+                                colour = G.C.SECONDARY_SET.Tarot,
+                                card = self
+                            }
+                        end  
+                    }))
+                end
+            end
+        end
+    end
+}
+
+SMODS.Joker {
+    key = "crying",
+    rarity = 2,
+    pos = {
+        x = 6,
+        y = 7
+    },
+    atlas = "Jokers",
+    cost = 7,
+    unlocked = true,
+    blueprint_compat = true,
+
+    config = {extra = {plus_xmult = 0.05}},
+    loc_vars = function(self, info_queue, card)
+        info_queue[#info_queue + 1] = G.P_CENTERS.m_wild
+        return {
+            vars = {
+                card.ability.extra.plus_xmult,
+            }
+        }
+    end,
+
+    in_pool = function(self, args)
+        for k, v in pairs(G.playing_cards) do
+            if SMODS.has_enhancement(v, 'm_wild') then
+                return true
+            end
+        end
+        return false
+    end,
+
+    calculate = function(self, card, context)
+        if context.individual and context.cardarea == G.play then
+            if SMODS.has_enhancement(context.other_card, 'm_wild') then
+                context.other_card.ability.perma_x_mult = context.other_card.ability.perma_x_mult or 0
+                context.other_card.ability.perma_x_mult = context.other_card.ability.perma_x_mult + card.ability.extra.plus_xmult
+                return {
+                    message = localize('k_upgrade_ex'),
+                    colour = G.C.RED
+                }
+            end
+        end
+    end
+}
+
+SMODS.Joker {
+    key = "consolation",
+    rarity = 1,
+    pos = {
+        x = 7,
+        y = 7
+    },
+    atlas = "Jokers",
+    cost = 4,
+    unlocked = true,
+    blueprint_compat = true,
+
+    config = {extra = {xmult = 1, plus_xmult = 0.5}},
+    loc_vars = function(self, info_queue, card)
+        return {
+            vars = {
+                card.ability.extra.plus_xmult,
+            }
+        }
+    end,
+
+    calculate = function(self, card, context)
+        if context.joker_main then
+            for i = 1, #context.scoring_hand do
+                if context.scoring_hand[i].debuffed_by_blind and not context.blueprint then
+                    card.ability.extra.xmult = card.ability.extra.xmult + card.ability.extra.plus_xmult
+                end
+            end
+            if card.ability.extra.xmult > 1 then
+                return {
+                    xmult = card.ability.extra.xmult
+                }
+            end
+        end
+
+        if context.after and not context.blueprint then
+            card.ability.extra.xmult = 1
+        end
+    end
+}
+
+SMODS.Joker {
+    key = "valentine",
+    rarity = 3,
+    pos = {
+        x = 8,
+        y = 7
+    },
+    atlas = "Jokers",
+    cost = 8,
+    unlocked = true,
+    blueprint_compat = false,
+
+    loc_vars = function(self, info_queue, card)
+        info_queue[#info_queue + 1] = G.P_CENTERS.m_wild
+        
+        if G.GAME.current_round.mksn_valentine.color == 'Red' then
+            info_queue[#info_queue + 1] = G.P_SEALS['Red']
+        elseif G.GAME.current_round.mksn_valentine.color == 'Gold' then
+            info_queue[#info_queue + 1] = G.P_SEALS['Gold']
+        elseif G.GAME.current_round.mksn_valentine.color == 'Lucky' then
+            info_queue[#info_queue + 1] = G.P_SEALS['mksn_lucky']
+        elseif G.GAME.current_round.mksn_valentine.color == 'Blue' then
+            info_queue[#info_queue + 1] = G.P_SEALS['Blue']
+        elseif G.GAME.current_round.mksn_valentine.color == 'Purple' then
+            info_queue[#info_queue + 1] = G.P_SEALS['Purple']
+        elseif G.GAME.current_round.mksn_valentine.color == 'White' then
+            info_queue[#info_queue + 1] = G.P_SEALS['mksn_white']
+        end
+
+        return {
+            vars = {
+                G.GAME.current_round.mksn_valentine.color,
+            }
+        }
+    end,
+
+    in_pool = function(self, args)
+        for k, v in pairs(G.playing_cards) do
+            if SMODS.has_enhancement(v, 'm_wild') then
+                return true
+            end
+        end
+        return false
+    end,
+
+    calculate = function(self, card, context)
+        if not card.debuff and G.GAME.current_round.mksn_valentine.color == 'Red' then
+            if context.repetition and context.cardarea == G.play then
+                if SMODS.has_enhancement(context.other_card, 'm_wild') then
+                    return {
+                        message = localize('k_again_ex'),
+                        repetitions = 1,
+                        card = card
+                    }
+                end
+            end
+        end
+
+        if G.GAME.current_round.mksn_valentine.color == 'Gold' then
+            if context.individual and context.cardarea == G.play then
+                if SMODS.has_enhancement(context.other_card, 'm_wild') then
+                    return {
+                        dollars = 3
+                    }
+                end
+            end
+        end
+
+        if G.GAME.current_round.mksn_valentine.color == 'Lucky' then
+            if context.individual and context.cardarea == G.play then
+                if SMODS.has_enhancement(context.other_card, 'm_wild') then
+                    if SMODS.pseudorandom_probability(card, 'lucky_seal', 1, 4) then
+                        local opt = pseudorandom("guess_ur_lucky_enough", 1, 5)
+                        if opt == 1 then
+                            G.E_MANAGER:add_event(Event({
+                                func = function()
+                                    play_sound('mksn_applause')
+                                    ease_dollars(20, true)
+                                    return true
+                                end
+                            }))
+                            return {
+                                card = card,
+                                message = localize('k_mksn_plus_dollah'),
+                                colour = G.C.GREEN
+                            }
+                        elseif opt == 2 then
+                            G.E_MANAGER:add_event(Event({
+                                func = function()
+                                    play_sound('mksn_applause')
+                                    add_tag(Tag('tag_double'))
+                                    play_sound('generic1', 0.9 + math.random()*0.1, 0.8)
+                                    play_sound('holo1', 1.2 + math.random()*0.1, 0.4)
+                                    return true
+                                end
+                            }))
+                            return {
+                                card = card,
+                                message = localize('k_mksn_plus_tag'),
+                                colour = G.C.GREEN
+                            }
+                        elseif opt == 3 then
+                            if #G.consumeables.cards + G.GAME.consumeable_buffer < G.consumeables.config.card_limit then
+                                G.E_MANAGER:add_event(Event({
+                                    func = function()
+                                        play_sound('mksn_applause')
+                                        local card_type
+                                        local type = pseudorandom("consumable_type", 1, 5)
+                                        if (type == 1 or type == 2) then
+                                            card_type = 'Tarot'
+                                        elseif (type == 3 or type == 4) then
+                                            card_type = 'Planet'
+                                        elseif type == 5 then
+                                            card_type = 'Spectral'
+                                        end
+                                        G.GAME.consumeable_buffer = G.GAME.consumeable_buffer + 1
+                                        G.E_MANAGER:add_event(Event({
+                                        trigger = 'before',
+                                        delay = 0.0,
+                                        func = (function()
+                                            local card = create_card(card_type,G.consumeables, nil, nil, nil, nil, nil, 'sup')
+                                            card:add_to_deck()
+                                            G.consumeables:emplace(card)
+                                            G.GAME.consumeable_buffer = 0
+                                            return true
+                                        end)}))
+                                    return true
+                                    end  
+                                }))
+                                return {
+                                    card = card,
+                                    message = localize('k_mksn_plus_cons'),
+                                    colour = G.C.GREEN
+                                }
+                            end
+                        elseif opt == 4 then
+                            if #G.jokers.cards + G.GAME.joker_buffer < G.jokers.config.card_limit then
+                                local jokers_to_create = math.min(1, G.jokers.config.card_limit - (#G.jokers.cards + G.GAME.joker_buffer))
+                                G.GAME.joker_buffer = G.GAME.joker_buffer + jokers_to_create
+                                G.E_MANAGER:add_event(Event({
+                                    func = function() 
+                                        play_sound('mksn_applause')
+                                        for i = 1, jokers_to_create do
+                                            local card = create_card('Joker', G.jokers, nil, nil, nil, nil, nil, 'freak')
+                                            card:add_to_deck()
+                                            G.jokers:emplace(card)
+                                            card:start_materialize()
+                                            G.GAME.joker_buffer = 0
+                                        end
+                                        return true
+                                    end
+                                }))
+                                return {
+                                    card = card,
+                                    message = localize('k_mksn_plus_jokah'),
+                                    colour = G.C.GREEN
+                                }
+                            end
+                        elseif opt == 5 then
+                            local jokers = {}
+                            for k, v in ipairs(G.jokers.cards) do
+                                if not v.edition then
+                                    jokers[#jokers + 1] = v
+                                end
+                            end
+                            local edition = poll_edition('edition', nil, true, true)
+                            if #jokers > 0 then
+                                G.E_MANAGER:add_event(Event({trigger = 'after', delay = 0.4, func = function()
+                                    play_sound('mksn_applause')
+                                    local chosen_joker = pseudorandom_element(jokers, pseudoseed("mushroom"))
+                                    chosen_joker:set_edition(edition, true)
+                                return true end }))
+                            end
+                            return {
+                                card = card,
+                                message = localize('k_mksn_plus_edit'),
+                                colour = G.C.GREEN
+                            }
+                        end
+                    end
+                end
+            end
+        end
+        
+        if G.GAME.current_round.mksn_valentine.color == 'Blue' then
+            if context.individual and context.cardarea == G.hand and context.end_of_round and not context.blueprint then
+                if SMODS.has_enhancement(context.other_card, 'm_wild') and #G.consumeables.cards + G.GAME.consumeable_buffer < G.consumeables.config.card_limit then
+                    local card_type = 'Planet'
+                    G.GAME.consumeable_buffer = G.GAME.consumeable_buffer + 1
+                    G.E_MANAGER:add_event(Event({
+                        trigger = 'before',
+                        delay = 0.0,
+                        func = (function()
+                            if G.GAME.last_hand_played then
+                                local _planet = 0
+                                for k, v in pairs(G.P_CENTER_POOLS.Planet) do
+                                    if v.config.hand_type == G.GAME.last_hand_played then
+                                        _planet = v.key
+                                    end
+                                end
+                                if _planet == 0 then _planet = nil end
+                                local card = create_card(card_type,G.consumeables, nil, nil, nil, nil, _planet, 'blusl')
+                                card:add_to_deck()
+                                G.consumeables:emplace(card)
+                                G.GAME.consumeable_buffer = 0
+                            end
+                            return true
+                        end)}))
+                end
+            end
+        end
+
+        if G.GAME.current_round.mksn_valentine.color == 'Purple' then
+            if context.discard then
+                if SMODS.has_enhancement(context.other_card, 'm_wild') and #G.consumeables.cards + G.GAME.consumeable_buffer < G.consumeables.config.card_limit then
+                    G.GAME.consumeable_buffer = G.GAME.consumeable_buffer + 1
+                    G.E_MANAGER:add_event(Event({
+                        trigger = 'before',
+                        delay = 0.0,
+                        func = (function()
+                                local card = create_card('Tarot',G.consumeables, nil, nil, nil, nil, nil, '8ba')
+                                card:add_to_deck()
+                                G.consumeables:emplace(card)
+                                G.GAME.consumeable_buffer = 0
+                            return true
+                        end)}))
+                    return nil, true
+                end
+            end
+        end
+    end
+}
+
+SMODS.Joker {
+    key = "collector",
+    rarity = 3,
+    pos = {
+        x = 9,
+        y = 7
+    },
+    atlas = "Jokers",
+    cost = 8,
+    unlocked = true,
+    blueprint_compat = true,
+
+    config = {extra = {xmult = 1, plus_xmult = 0.4}},
+    loc_vars = function(self, info_queue, card)
+        return {
+            vars = {
+                card.ability.extra.plus_xmult,
+                card.ability.extra.xmult,
+            }
+        }
+    end,
+
+    calculate = function(self, card, context)
+        if context.joker_main then
+            if card.ability.extra.xmult > 1 then
+                return {
+                    xmult = card.ability.extra.xmult
+                }
+            end
+        end
+
+        if context.end_of_round and G.GAME.blind.boss and not context.repetition and not context.individual and not context.blueprint then
+            card.ability.extra.xmult = 1
+            return {
+                message = localize('k_reset'),
+                colour = G.C.MULT
+            }
+        end
+
+        if context.open_booster then
+            card.ability.extra.xmult = card.ability.extra.xmult + card.ability.extra.plus_xmult
+            return {
+                message = localize('k_upgrade_ex'),
+                colour = G.C.MULT,
+            }
+        end
+    end
+}
+
+SMODS.Joker {
     key = "sommers",
     rarity = 4,
     pos = {
@@ -5063,6 +5498,12 @@ function SMODS.current_mod.reset_game_globals(run_start)
         G.GAME.current_round.mksn_big_smoke.id = big_smoke.base.id
     end
 
+     -- Valentine Card
+    G.GAME.current_round.mksn_valentine.color = 'Gold'
+    local valid_colors = {'Red', 'Gold', 'Lucky', 'Blue', 'Purple', 'White'}
+    local valentine_card = pseudorandom_element(valid_colors, pseudoseed('my_valentine'..G.GAME.round_resets.ante))
+    G.GAME.current_round.mksn_valentine.color = valentine_card
+
     -- Two-Factor Sign
     G.GAME.current_round.mksn_2fsign1.rank = '2'
     G.GAME.current_round.mksn_2fsign2.rank = '2'
@@ -5107,6 +5548,10 @@ Game.init_game_object = function(self)
         rank = 9,
     }
 
+    ret.current_round.mksn_valentine = {
+        color = 'Gold'
+    }
+
     ret.current_round.mksn_2fsign1 = {
         rank = 2,
     }
@@ -5129,6 +5574,9 @@ end
 
 function SMODS.current_mod.set_debuff(card)
     if card.seal and card.seal == "mksn_white" then
+        return 'prevent_debuff'
+    end
+    if G.GAME.current_round.mksn_valentine.color == 'White' and SMODS.has_enhancement(card, 'm_wild') then
         return 'prevent_debuff'
     end
     return false
