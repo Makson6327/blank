@@ -503,7 +503,7 @@ return {
                 text = {
                     "Retrigger all played cards",
                     "if played hand contains",
-                    "a {C:attention}Bonus{} card or a {C:attention}Mult{} card",
+                    "a {C:attention}Bonus{} card and a {C:attention}Mult{} card",
                 },
             },
             j_mksn_double_joker = {

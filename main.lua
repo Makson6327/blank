@@ -4312,7 +4312,7 @@ SMODS.Joker {
                     mults = true
                 end
             end
-            if bonuses or mults then
+            if bonuses and mults then
                 card.ability.extra.repetitions = 1
             end
         end
