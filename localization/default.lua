@@ -377,7 +377,7 @@ return {
                 text = {
                     "{C:chips}+#1#{} chips",
                     "This card is destroyed",
-                    "at the end of first",
+                    "at the start of first",
                     "shop of Ante"
                 }
             },
@@ -398,6 +398,16 @@ return {
                     "Retrigger all played {C:attention}#1#{}",
                     "{C:attention}#2#{} additional times,",
                     "rank changes every round",
+                }
+            },
+            j_mksn_blood_donation = {
+                name = "Blood Donation",
+                text = {
+                    "Sell this card to",
+                    "{C:attention}lose{} {C:blue}#1#{} hands and create",
+                    "three random {C:attention}Tags{}",
+                    "{C:inactive}(Can be activated only if",
+                    "{C:inactive}more than two hands remain)"
                 }
             },
             j_mksn_bottlers = {
@@ -466,8 +476,10 @@ return {
                 name = "Consolation Prize",
                 text = {
                     "This Joker gains",
-                    "{X:mult,C:white} X#1# {} Mult for each",
-                    "scored {C:attention}debuffed{} cards",
+                    "{X:mult,C:white} X#2# {} Mult for each",
+                    "scored {C:attention}debuffed{} card,",
+                    "resets every hand",
+                    "{C:inactive}(Currently {X:mult,C:white} X#1# {} Mult)",
                 },
             },
             j_mksn_crying = {
@@ -528,6 +540,15 @@ return {
                     "if Mult differs Chips",
                     "at least 10 times",
                     "{C:inactive}(Currently {C:mult}+#2#{C:inactive} Mult)",
+                },
+            },
+            j_mksn_glaza_polzut = {
+                name = "Eyes in the Water",
+                text = {
+                    "This Joker gains {C:chips}+#1#{} Chips",
+                    "when a {C:attention}face{} card",
+                    "is destroyed",
+                    "{C:inactive}(Currently {C:chips}+#2#{C:inactive} Chips)",
                 },
             },
             j_mksn_firestarter = {
@@ -603,6 +624,14 @@ return {
                     "played hand has exactly",
                     "{C:attention}5{} cards and is a {C:attention}High Card{}",
                     "{C:inactive}(Must have room)",
+                },
+            },
+            j_mksn_home = {
+                name = "Home",
+                text = {
+                    "{C:chips}+#1#{} Chips per {C:attention}Full House{}",
+                    "played this run",
+                    "{C:inactive}(Currently {C:chips}+#2#{C:inactive} Chips)",
                 },
             },
             j_mksn_inharitance = {
@@ -744,10 +773,17 @@ return {
             j_mksn_nichola = {
                 name = "Nichola",
                 text = {
-                    "Add random enhancement {C:attention}it{},",
+                    "Add random {C:attention}enhancement{},",
                     "{C:dark_edition}Edition{} and {C:attention}Seal{}",
                     "on all played {c:attention}Queens"
                 }
+            },
+            j_mksn_nightshade = {
+                name = "Nightshade",
+                text = {
+                    "{X:mult,C:white} X#1# {} Mult",
+                    "{C:blue}+#2#{} hand each round,",
+                },
             },
             j_mksn_divided_zero = {
                 name = "Oops! Divided by 0",
@@ -755,6 +791,14 @@ return {
                     "Nullifies all {C:attention}listed",
                     "{C:green,E:1,S:1.1}probabilities",
                     "{C:inactive}(ex: {C:green}1 in 3{C:inactive} -> {C:green}0 in 3{C:inactive})",
+                },
+            },
+            j_mksn_playdough = {
+                name = "Playdough Joker",
+                text = {
+                    "Add random {C:attention}enhancement{}",
+                    "on all played cards",
+                    "for a hand"
                 },
             },
             j_mksn_porcelain = {
@@ -816,6 +860,22 @@ return {
                     "{C:inactive}(Currently {C:chips}+#2#{C:inactive} Chips)",
                 }
             },
+            j_mksn_shoplift = {
+                name = "Shoplifter",
+                text = {
+                    "When {C:attention}Blind{} skipped",
+                    "enter the {C:attention}Shop{} and",
+                    "destroy this Joker"
+                }
+            },
+            j_mksn_silver_bullets = {
+                name = "Silver Bullets",
+                text = {
+                    "Each fifth scored {C:attention}Sterling{}",
+                    "card gives {X:mult,C:white} X#1# {} Mult",
+                    "when scored",
+                }
+            },
             j_mksn_skyscraper = {
                 name = "Skyscraper",
                 text = {
@@ -831,6 +891,16 @@ return {
                     "{C:inactive}no{} suit give",
                     "{C:mult}+#1#{} Mult when scored",
                 },
+            },
+            j_mksn_sola_sistim = {
+                name = "Solar Systim",
+                text = {
+                    "{C:red}+#1#{} Mult per unigue {C:planet}Planet{}",
+                    "card used this run,",
+                    "{C:attention}double{} the Mult",
+                    "if all {C:planet}Planets{} was used",
+                    "{C:inactive}(Currently {C:red}+#2#{C:inactive} Mult)",
+                }
             },
             j_mksn_soldier = {
                 name = "Soldier Joker",
@@ -902,6 +972,15 @@ return {
                     "hand is a {C:attention}High Card",
                 },
             },
+            j_mksn_tiny_spaceships_final_adventure = {
+                name = "Tiny Spaceship",
+                text = {
+                    "Upgrade level of {C:attention}most",
+                    "{C:attention}used{} poker hand when",
+                    "{C:planet}Earth{} used",
+                    "{C:inactive}(Most hand played is {C:attention}#1#{C:inactive})",
+                },
+            },
             j_mksn_toxic_waste = {
                 name = "Toxic Waste",
                 text = {
@@ -952,6 +1031,15 @@ return {
                     "{C:attention}Wild{} cards have",
                     "ability of {C:attention}#1#{} seal,",
                     "resets every round"
+                },
+            },
+            j_mksn_watermelon = {
+                name = "Watermelon",
+                text = {
+                    "{C:mult}+#1#{} Mult",
+                    "This Joker has {C:mult}-#2#{} Mult",
+                    "for every card {C:attention}more/less{}",
+                    "than in {C:attention}starting{} deck"
                 },
             },
             j_mksn_we_rich = {
