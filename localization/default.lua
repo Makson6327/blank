@@ -479,7 +479,6 @@ return {
                     "{X:mult,C:white} X#2# {} Mult for each",
                     "scored {C:attention}debuffed{} card,",
                     "resets every hand",
-                    "{C:inactive}(Currently {X:mult,C:white} X#1# {} Mult)",
                 },
             },
             j_mksn_crying = {
@@ -893,7 +892,7 @@ return {
                 },
             },
             j_mksn_sola_sistim = {
-                name = "Solar Systim",
+                name = "Sola Sistim",
                 text = {
                     "{C:red}+#1#{} Mult per unigue {C:planet}Planet{}",
                     "card used this run,",
@@ -975,7 +974,7 @@ return {
             j_mksn_tiny_spaceships_final_adventure = {
                 name = "Tiny Spaceship",
                 text = {
-                    "Upgrade level of {C:attention}most",
+                    "Upgrade level of {C:attention}last",
                     "{C:attention}used{} poker hand when",
                     "{C:planet}Earth{} used",
                     "{C:inactive}(Most hand played is {C:attention}#1#{C:inactive})",

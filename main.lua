@@ -4390,27 +4390,25 @@ SMODS.Joker {
     perishable_compat = false,
     soul_pos = nil,
 
+    config = {extra = {is_blind = false}},
     loc_vars = function(self, info_queue, card)
-        local active = G.GAME.blind and (G.GAME.blind:get_type() == 'Boss' or G.GAME.blind:get_type() == 'Small' or G.GAME.blind:get_type() == 'Big')
-        local main_end = {
-            {n=G.UIT.C, config={align = "bm", minh = 0.4}, nodes={
-                {n=G.UIT.C, config={ref_table = self, align = "m", colour = active and G.C.GREEN or G.C.RED, r = 0.05, padding = 0.06}, nodes={
-                    {n=G.UIT.T, config={text = ' '..localize(active and 'k_active' or 'k_mksn_non_active')..' ',colour = G.C.UI.TEXT_LIGHT, scale = 0.32*0.9}},
-                }}
-            }}
-        }
         return {
             main_end = main_end
         }
     end,
 
     calculate = function(self, card, context)
-        if context.selling_self then
-            if G.GAME.blind and (G.GAME.blind:get_type() == 'Boss' or G.GAME.blind:get_type() == 'Small' or G.GAME.blind:get_type() == 'Big') then
-                G.GAME.is_guaranteed = true
-                for k, v in pairs(G.GAME.probabilities) do 
-                    G.GAME.probabilities[k] = 1112
-                end
+        if context.setting_blind and not context.getting_sliced then
+            card.ability.extra.is_blind = true
+        end
+            
+        if context.end_of_round and not context.repetition and not context.individual then
+            card.ability.extra.is_blind = false
+        end
+        if context.selling_self and card.ability.extra.is_blind then
+            G.GAME.is_guaranteed = true
+            for k, v in pairs(G.GAME.probabilities) do 
+                G.GAME.probabilities[k] = 1112
             end
         end
     end
@@ -5522,16 +5520,8 @@ SMODS.Joker {
     perishable_compat = true,
     soul_pos = nil,
 
-    config = {extra = {minus_hands = 2}},
+    config = {extra = {minus_hands = 2, is_blind = false}},
     loc_vars = function(self, info_queue, card)
-        local active = G.GAME.blind and (G.GAME.blind:get_type() == 'Boss' or G.GAME.blind:get_type() == 'Small' or G.GAME.blind:get_type() == 'Big') and G.GAME.current_round.hands_left > card.ability.extra.minus_hands
-        local main_end = {
-            {n=G.UIT.C, config={align = "bm", minh = 0.4}, nodes={
-                {n=G.UIT.C, config={ref_table = self, align = "m", colour = active and G.C.GREEN or G.C.RED, r = 0.05, padding = 0.06}, nodes={
-                    {n=G.UIT.T, config={text = ' '..localize(active and 'k_active' or 'k_mksn_non_active')..' ',colour = G.C.UI.TEXT_LIGHT, scale = 0.32*0.9}},
-                }}
-            }}
-        }
         return {
             main_end = main_end,
             vars = {
@@ -5541,7 +5531,15 @@ SMODS.Joker {
     end,
 
     calculate = function(self, card, context)
-        if context.selling_self and G.GAME.blind and (G.GAME.blind:get_type() == 'Boss' or G.GAME.blind:get_type() == 'Small' or G.GAME.blind:get_type() == 'Big') and G.GAME.current_round.hands_left > card.ability.extra.minus_hands then
+        if context.setting_blind and not context.getting_sliced then
+            card.ability.extra.is_blind = true
+        end
+            
+        if context.end_of_round and not context.repetition and not context.individual then
+            card.ability.extra.is_blind = false
+        end
+
+        if context.selling_self and card.ability.extra.is_blind and G.GAME.current_round.hands_left > card.ability.extra.minus_hands then
             ease_hands_played(-2)
             local tag_keys = {
                 'tag_uncommon',
@@ -5772,31 +5770,25 @@ SMODS.Joker {
     perishable_compat = true,
     soul_pos = nil,
     
-    config = {extra = {most_used_hand = nil, hands_count = 0}},
+    config = {extra = {hand_type = nil}},
     loc_vars = function(self, info_queue, card)
         info_queue[#info_queue + 1] = G.P_CENTERS.c_earth
         return {
             vars = {
-                card.ability.extra.most_used_hand,
-                card.ability.extra.hands_count
+                card.ability.extra.hand_type
             }
         }
     end,
 
     calculate = function(self, card, context)
         if context.before and not context.blueprint then
-            if G.GAME.hands[context.scoring_name].played > card.ability.extra.hands_count then
-                card.ability.extra.most_used_hand = context.scoring_name
-                card.ability.extra.hands_count = G.GAME.hands[context.scoring_name].played
-            end
+            card.ability.extra.hand_type = context.scoring_name
         end
 
         if context.using_consumeable and context.consumeable.config.center_key == 'c_earth' then
-            if card.ability.extra.hands_count > 0 then
-                SMODS.smart_level_up_hand(context.blueprint_card or card, card.ability.extra.most_used_hand, nil, 1)
-            end
+            SMODS.smart_level_up_hand(context.blueprint_card or card, card.ability.extra.hand_type, nil, 1)
         end
-    end,
+    end
 }
 
 SMODS.Joker {
